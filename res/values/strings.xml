@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Suvermemo</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello Su Yuxin</string>
+    <string name="title_activity_notebook_list">NotebookListActivity</string>
+    <string name="text_empty_notebook_list">No Notebook to Display</string>
+    <string name="text_notebook_sync">Sync</string>
+    <string name="text_notebook_in_sync">Sync…</string>
+    <string name="title_activity_data">DataActivity</string>
+    <string name="text_load">Loading….</string>
+    <string name="error_list_notebooks">Error in listing notebooks!</string>
+    <string name="error_create_notestore">Error in creating note store!</string>
+
+</resources>

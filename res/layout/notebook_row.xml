@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/row_background">
+    
+    <ImageView
+    	android:id="@+id/image_notebook"
+    	android:src="@drawable/notebook"
+    	android:layout_width="32dip"
+    	android:layout_height="32dip" />
+    <Button 
+        android:id="@+id/button_notebook_sync"
+        android:layout_alignParentRight="true"
+        android:text="@string/text_notebook_sync"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+    <TextView 
+        android:id="@+id/text_notebook_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf = "@id/button_notebook_sync"
+        android:layout_toRightOf = "@id/image_notebook"
+        android:layout_centerVertical = "true"
+        android:layout_gravity="center"
+        android:textIsSelectable="false" />
+</RelativeLayout>
