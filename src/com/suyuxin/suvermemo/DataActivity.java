@@ -14,6 +14,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.database.Cursor;
 
 
 @SuppressLint("ValidFragment")
@@ -26,10 +27,9 @@ public class DataActivity extends Activity {
 	  	= EvernoteSession.EvernoteService.PRODUCTION;
 		
 	protected EvernoteSession evernote_session;
-	protected final int DIALOG_PROGRESS = 101;
 	
+	protected NoteDbAdapter database;
 	//common used data
-	protected String[] notebook_names = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,31 +37,33 @@ public class DataActivity extends Activity {
 		//set evernote session
 		evernote_session = EvernoteSession.getInstance(this,
 				CONSUMER_KEY, CONSUMER_SECRET, EVERNOTE_SERVICE);
-		//
+		//set database
+		database = new NoteDbAdapter(this);
 		
 		
 	}
 	
+	protected String[] getNotebookNames()
+	{
+		database.open();
+		Cursor cursor = database.getNotebookList();
+		//if the database is empty, return to the empty tag
+		if(cursor.getCount() == 0)
+		{
+			database.close();
+			return new String[]{getResources().getString(R.string.text_empty_notebook_list)};
+		}
+		String[] names = new String[cursor.getCount()];
+		int index = 0;
+		if(cursor.moveToFirst())
+		{
+			do {
+				names[index] = cursor.getString(1);
+				index++;
+			}while(cursor.moveToNext());
+		}
+		database.close();
+		return names;
+	}
 	
-
-	  @SuppressWarnings("deprecation")
-	  @Override
-	  protected Dialog onCreateDialog(int id) {
-	    switch (id) {
-	      case DIALOG_PROGRESS:
-	        return new ProgressDialog(DataActivity.this);
-	    }
-	    return super.onCreateDialog(id);
-	  }
-
-	  @Override
-	  @SuppressWarnings("deprecation")
-	  protected void onPrepareDialog(int id, Dialog dialog) {
-	    switch (id) {
-	      case DIALOG_PROGRESS:
-	        ((ProgressDialog) dialog).setIndeterminate(true);
-	        dialog.setCancelable(false);
-	        ((ProgressDialog) dialog).setMessage(getString(R.string.text_load));
-	    }
-	  }
 }

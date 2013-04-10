@@ -1,10 +1,12 @@
 package com.suyuxin.suvermemo;
 
 import java.util.List;
+import java.util.ListIterator;
 
 import com.evernote.client.android.AsyncNoteStoreClient;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.OnClientCallback;
+import com.evernote.edam.notestore.NoteStore;
 import com.evernote.edam.type.Notebook;
 import com.evernote.thrift.transport.TTransportException;
 
@@ -25,7 +27,6 @@ import android.widget.Toast;
 
 public class MainActivity extends DataActivity{
 	
-	NotebookListAdapter adapter_notebooks = null;
 	
 	private class NotebookListAdapter extends ArrayAdapter<String> {
 
@@ -70,7 +71,7 @@ public class MainActivity extends DataActivity{
 		
 	}
 	
-	private class UpdateNotebookList extends AsyncTask<Void, Integer, Integer>
+	private class UpdateNotebookList extends AsyncTask<Void, Integer, String[]>
 	{
 		ProgressBar progress_bar = null;
 		private final int progress_bar_max_value = 200;
@@ -87,14 +88,15 @@ public class MainActivity extends DataActivity{
 		}
 
 		@Override
-		protected void onPostExecute(Integer result) {
+		protected void onPostExecute(String[] names) {
 			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			if(notebook_names != null)
-			{
-				Toast.makeText(getApplication(), "number of notebook is " + notebook_names.length,
-					Toast.LENGTH_LONG).show();
-			}
+			super.onPostExecute(names);
+			ListView view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
+			NotebookListAdapter adapter = new NotebookListAdapter(getBaseContext(),
+					R.layout.notebook_row,
+					R.id.text_notebook_name,
+					names);
+			view_notebook_list.setAdapter(adapter);
 		}
 
 		@Override
@@ -104,38 +106,42 @@ public class MainActivity extends DataActivity{
 			progress_bar.setProgress(values[0]);
 		}
 
+		@SuppressWarnings("finally")
 		@Override
-		protected Integer doInBackground(Void... arg0) {
+		protected String[] doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub	
-			
-				try {
-					evernote_session.getClientFactory().createNoteStoreClient()
-						.listNotebooks(new OnClientCallback<List<Notebook>>(){
-
-						@Override
-						public void onSuccess(List<Notebook> notebooks) {
-							// TODO Auto-generated method stub
-							notebook_names = new String[notebooks.size()];
-							for(int index = 0; index < notebooks.size(); index++)
-							{
-								notebook_names[index] = notebooks.get(index).getName();
-							}
-						}
-
-						@Override
-						public void onException(Exception exception) {
-							// TODO Auto-generated method stub
-							Toast.makeText(getApplication(), R.string.error_list_notebooks, Toast.LENGTH_LONG).show();
-						}
-						
-					});
-					publishProgress(progress_bar_max_value);
-				} catch (TTransportException e) {
-					// TODO Auto-generated catch block
-					Toast.makeText(getApplication(), R.string.error_create_notestore, Toast.LENGTH_LONG).show();
+			String auth_token = evernote_session.getAuthToken();
+			NoteStore.Client client;
+			String[] notebook_names = null;
+			publishProgress(progress_bar_max_value / 3);
+			try {
+				client = evernote_session.getClientFactory().createNoteStoreClient().getClient();
+				List<Notebook> notebooks = client.listNotebooks(auth_token);
+				notebook_names = new String[notebooks.size()];
+				//open database
+				database.open();
+				ListIterator<Notebook> iterator = notebooks.listIterator();
+				int index = 0;
+				int progress_slice = 2 * progress_bar_max_value / 3 / notebooks.size();
+				while(iterator.hasNext())
+				{
+					Notebook notebook = iterator.next();
+					//get names to display
+					notebook_names[index] = notebook.getName();
+					index++;
+					//store into database
+					database.inertNotebook(notebook.getName(), notebook.getGuid(), 1);
+					//update progress
+					publishProgress(progress_bar_max_value / 3 + progress_slice * index);
 				}
-			
-			return 0;
+				database.close();
+				publishProgress(progress_bar_max_value);
+			} catch (TTransportException e) {
+				// TODO Auto-generated catch block
+				Toast.makeText(getApplication(), R.string.error_list_notebooks, Toast.LENGTH_LONG).show();
+			}finally{
+				return notebook_names;
+			}
 		}
 		
 	}
@@ -146,11 +152,11 @@ public class MainActivity extends DataActivity{
 		//set adapter of notebook list
 		setContentView(R.layout.activity_main);
 		ListView view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
-		adapter_notebooks = new NotebookListAdapter(this,
+		NotebookListAdapter adapter = new NotebookListAdapter(this,
 				R.layout.notebook_row,
 				R.id.text_notebook_name,
-				new String[]{getResources().getString(R.string.text_empty_notebook_list)});
-		view_notebook_list.setAdapter(adapter_notebooks);
+				getNotebookNames());
+		view_notebook_list.setAdapter(adapter);
 		
 	}
 	@Override

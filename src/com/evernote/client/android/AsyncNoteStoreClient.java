@@ -25,9 +25,12 @@
  */
 package com.evernote.client.android;
 
+import com.evernote.edam.error.EDAMSystemException;
+import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.notestore.*;
 import com.evernote.edam.type.*;
 import com.evernote.edam.userstore.AuthenticationResult;
+import com.evernote.thrift.TException;
 import com.evernote.thrift.protocol.TProtocol;
 
 import java.util.List;
