@@ -17,8 +17,8 @@ public final class R {
          screen margins) for sw720dp devices (e.g. 10" tablets) in landscape here.
     
          */
-        public static final int activity_horizontal_margin=0x7f050000;
-        public static final int activity_vertical_margin=0x7f050001;
+        public static final int activity_horizontal_margin=0x7f040000;
+        public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
         public static final int ic_launcher=0x7f020000;
@@ -45,24 +45,24 @@ public final class R {
         public static final int esdk__oauth=0x7f070000;
     }
     public static final class string {
-        public static final int action_settings=0x7f040008;
-        public static final int app_name=0x7f040007;
-        public static final int error_create_notestore=0x7f040011;
-        public static final int error_list_notebooks=0x7f040010;
-        public static final int esdk__err_api_setup=0x7f040005;
-        public static final int esdk__err_authentication=0x7f040004;
-        public static final int esdk__err_protocol_version=0x7f040003;
-        public static final int esdk__evernote=0x7f040000;
-        public static final int esdk__evernote_login_failed=0x7f040001;
-        public static final int esdk__evernote_login_successful=0x7f040002;
-        public static final int esdk__loading=0x7f040006;
-        public static final int hello_world=0x7f040009;
-        public static final int text_empty_notebook_list=0x7f04000b;
-        public static final int text_load=0x7f04000f;
-        public static final int text_notebook_in_sync=0x7f04000d;
-        public static final int text_notebook_sync=0x7f04000c;
-        public static final int title_activity_data=0x7f04000e;
-        public static final int title_activity_notebook_list=0x7f04000a;
+        public static final int action_settings=0x7f050001;
+        public static final int app_name=0x7f050000;
+        public static final int error_create_notestore=0x7f05000a;
+        public static final int error_list_notebooks=0x7f050009;
+        public static final int esdk__err_api_setup=0x7f050010;
+        public static final int esdk__err_authentication=0x7f05000f;
+        public static final int esdk__err_protocol_version=0x7f05000e;
+        public static final int esdk__evernote=0x7f05000b;
+        public static final int esdk__evernote_login_failed=0x7f05000c;
+        public static final int esdk__evernote_login_successful=0x7f05000d;
+        public static final int esdk__loading=0x7f050011;
+        public static final int hello_world=0x7f050002;
+        public static final int text_empty_notebook_list=0x7f050004;
+        public static final int text_load=0x7f050008;
+        public static final int text_notebook_in_sync=0x7f050006;
+        public static final int text_notebook_sync=0x7f050005;
+        public static final int title_activity_data=0x7f050007;
+        public static final int title_activity_notebook_list=0x7f050003;
     }
     public static final class style {
         /** 
