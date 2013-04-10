@@ -1,12 +1,18 @@
 package com.suyuxin.suvermemo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import com.evernote.client.android.AsyncNoteStoreClient;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.OnClientCallback;
+import com.evernote.edam.notestore.NoteCollectionCounts;
+import com.evernote.edam.notestore.NoteFilter;
+import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.notestore.NoteStore;
+import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
 import com.evernote.thrift.transport.TTransportException;
 
@@ -71,6 +77,81 @@ public class MainActivity extends DataActivity{
 		
 	}
 	
+	private class DownloadNotes extends AsyncTask<String, Integer, Void>
+	{
+		ProgressBar progress_bar = null;
+		private final int progress_bar_max_value = 10000;
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			if(progress_bar == null)
+			{
+				progress_bar = (ProgressBar)findViewById(R.id.progressBar_sync);
+			}
+			progress_bar.setMax(progress_bar_max_value);
+			progress_bar.setProgress(0);
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			// TODO Auto-generated method stub
+			super.onProgressUpdate(values);
+			progress_bar.setProgress(values[0]);
+		}
+
+		@SuppressWarnings("finally")
+		@Override
+		protected Void doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			String auth_token = evernote_session.getAuthToken();
+			String notebook_guid = params[0];
+			try {
+				NoteStore.Client client = evernote_session.getClientFactory().createNoteStoreClient().getClient();
+				//set notebook filter
+				NoteFilter filter = new NoteFilter();
+				filter.setNotebookGuid(notebook_guid);
+				//get note list
+				int offset = 0;
+				List<Note> note_list = new ArrayList<Note>();
+				NoteList list_buffer;
+				do
+				{
+					list_buffer = client.findNotes(auth_token, filter, offset, 20000);
+					offset += list_buffer.getNotesSize();
+					note_list.addAll(list_buffer.getNotes());
+					//update progress
+					publishProgress(offset * progress_bar_max_value / list_buffer.getTotalNotes());
+				}while(list_buffer.getTotalNotes() > note_list.size());
+				//get note content
+				database.open();
+				for(int index = 0; index < note_list.size(); index++)
+				{
+					publishProgress(index);
+					//download content
+					Note note = note_list.get(index);
+					note.setContent(client.getNoteContent(auth_token, note.getGuid()));
+					//save to database
+					database.insertNote(note, note.getUpdated(), 0);
+				}
+					
+			}catch(Exception e) {
+				Toast.makeText(getApplication(), R.string.error_download_note, Toast.LENGTH_LONG).show();
+				
+			}finally {
+				database.close();
+				return null;	
+			}
+		}
+		
+	}
+	
 	private class UpdateNotebookList extends AsyncTask<Void, Integer, String[]>
 	{
 		ProgressBar progress_bar = null;
@@ -113,11 +194,15 @@ public class MainActivity extends DataActivity{
 			String auth_token = evernote_session.getAuthToken();
 			NoteStore.Client client;
 			String[] notebook_names = null;
-			publishProgress(progress_bar_max_value / 3);
 			try {
 				client = evernote_session.getClientFactory().createNoteStoreClient().getClient();
 				List<Notebook> notebooks = client.listNotebooks(auth_token);
 				notebook_names = new String[notebooks.size()];
+				//get count of notes in each notebook
+				Map<String, Integer> counts = client.findNoteCounts(auth_token, new NoteFilter(), false)
+						.getNotebookCounts();
+				//update progress
+				publishProgress(progress_bar_max_value / 3);
 				//open database
 				database.open();
 				ListIterator<Notebook> iterator = notebooks.listIterator();
@@ -130,16 +215,16 @@ public class MainActivity extends DataActivity{
 					notebook_names[index] = notebook.getName();
 					index++;
 					//store into database
-					database.inertNotebook(notebook.getName(), notebook.getGuid(), 1);
+					database.insertNotebook(notebook.getName(), notebook.getGuid(), counts.get(notebook.getGuid()));
 					//update progress
 					publishProgress(progress_bar_max_value / 3 + progress_slice * index);
 				}
-				database.close();
 				publishProgress(progress_bar_max_value);
 			} catch (TTransportException e) {
 				// TODO Auto-generated catch block
 				Toast.makeText(getApplication(), R.string.error_list_notebooks, Toast.LENGTH_LONG).show();
 			}finally{
+				database.close();
 				return notebook_names;
 			}
 		}

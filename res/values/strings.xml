@@ -19,4 +19,5 @@
     <string name="esdk__err_authentication">Error authenticating to Evernote</string>
     <string name="esdk__err_api_setup">Error intializing Evernote API</string>
     <string name="esdk__loading">Loading</string>
+    <string name="error_download_note">Error in downloading note!</string>
 </resources>

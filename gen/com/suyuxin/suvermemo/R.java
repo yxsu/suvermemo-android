@@ -48,6 +48,7 @@ public final class R {
         public static final int action_settings=0x7f050001;
         public static final int app_name=0x7f050000;
         public static final int error_create_notestore=0x7f05000a;
+        public static final int error_download_note=0x7f050012;
         public static final int error_list_notebooks=0x7f050009;
         public static final int esdk__err_api_setup=0x7f050010;
         public static final int esdk__err_authentication=0x7f05000f;

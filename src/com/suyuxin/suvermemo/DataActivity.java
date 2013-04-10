@@ -58,7 +58,7 @@ public class DataActivity extends Activity {
 		if(cursor.moveToFirst())
 		{
 			do {
-				names[index] = cursor.getString(1);
+				names[index] = cursor.getString(1) + " : " + cursor.getString(2);
 				index++;
 			}while(cursor.moveToNext());
 		}

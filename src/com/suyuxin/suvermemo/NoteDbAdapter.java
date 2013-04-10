@@ -1,5 +1,7 @@
 package com.suyuxin.suvermemo;
 
+import com.evernote.edam.type.Note;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -84,7 +86,7 @@ public class NoteDbAdapter{
 		db_helper.close();
 	}
 	
-	public long inertNotebook(String name, String guid, int note_number)
+	public long insertNotebook(String name, String guid, int note_number)
 	{
 		ContentValues values = new ContentValues();
 		values.put(COL_NOTEBOOK_GUID, guid);
@@ -100,4 +102,17 @@ public class NoteDbAdapter{
 					null, null, null, null, null);
 	}
 	
+	public long insertNote(Note note, long show_time, int familiar_index)
+	{
+		ContentValues values = new ContentValues();
+		values.put(COL_NOTE_GUID, note.getGuid());
+		values.put(COL_NOTEBOOK_GUID, note.getNotebookGuid());
+		values.put(COL_TITLE, note.getTitle());
+		values.put(COL_CONTENT, note.getContent());
+		values.put(COL_CREATE_TIME, note.getCreated());
+		values.put(COL_UPDATE_TIME, note.getUpdated());
+		values.put(COL_SHOW_TIME, show_time);
+		values.put(COL_FAMILIAR_INDEX, familiar_index);
+		return db.insert(TABLE_NAME_NOTE, null, values);
+	}
 }
