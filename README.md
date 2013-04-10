@@ -1,4 +1,4 @@
-suvermemo-android
+Suvermemo-Android
 =================
 
 Suvermemo for Android
