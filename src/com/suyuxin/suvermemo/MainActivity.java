@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -69,6 +71,17 @@ public class MainActivity extends DataActivity{
 						new UpdateNotebookList().execute();
 						new DownloadNotes().execute(list_notebook_guid[position]);
 					}
+				}
+			});
+			Button enter = (Button)convertView.findViewById(R.id.button_notebook_enter);
+			enter.setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent(getContext(), NoteActivity.class);
+					intent.putExtra("notebook_guid", list_notebook_guid[position]);
+					startActivity(intent);
 				}
 			});
 			return convertView;
@@ -270,7 +283,6 @@ public class MainActivity extends DataActivity{
 				R.id.text_notebook_name,
 				getNotebookNames());
 		view_notebook_list.setAdapter(adapter);
-		
 	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

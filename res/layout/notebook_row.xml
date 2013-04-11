@@ -10,19 +10,30 @@
     	android:src="@drawable/notebook"
     	android:layout_width="32dip"
     	android:layout_height="32dip" />
-    <Button 
-        android:id="@+id/button_notebook_sync"
-        android:layout_alignParentRight="true"
-        android:text="@string/text_notebook_sync"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent" />
+    
     <TextView 
         android:id="@+id/text_notebook_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf = "@id/button_notebook_sync"
         android:layout_toRightOf = "@id/image_notebook"
         android:layout_centerVertical = "true"
         android:layout_gravity="center"
         android:textIsSelectable="false" />
+    
+    <LinearLayout
+        android:layout_width="wrap_content"
+   	 	android:layout_height="wrap_content"
+   	 	android:layout_alignParentRight="true"
+    	android:orientation="horizontal">
+    	<Button 
+        	android:id="@+id/button_notebook_enter"
+        	android:text="@string/text_notebook_enter"
+        	android:layout_width="wrap_content"
+        	android:layout_height="match_parent" />
+    	<Button 
+        	android:id="@+id/button_notebook_sync"
+        	android:text="@string/text_notebook_sync"
+        	android:layout_width="wrap_content"
+        	android:layout_height="match_parent" />
+    </LinearLayout>
 </RelativeLayout>

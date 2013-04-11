@@ -187,7 +187,7 @@ public class NoteDbAdapter{
 		ContentValues values = new ContentValues();
 		values.put(COL_SHOW_TIME, show_time);
 		values.put(COL_FAMILIAR_INDEX, familiar_index);
-		return db.update(TABLE_NAME_NOTE, values, COL_NOTE_GUID + " = " + note_guid, null) > 0;
+		return db.update(TABLE_NAME_NOTE, values, COL_NOTE_GUID + "='" + note_guid + "'", null) > 0;
 	}
 	
 	public Map<String, NoteInfo> getNote(String notebook_guid)
