@@ -5,20 +5,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import com.evernote.client.android.AsyncNoteStoreClient;
 import com.evernote.client.android.EvernoteSession;
-import com.evernote.client.android.OnClientCallback;
-import com.evernote.edam.error.EDAMNotFoundException;
-import com.evernote.edam.error.EDAMSystemException;
-import com.evernote.edam.error.EDAMUserException;
-import com.evernote.edam.notestore.NoteCollectionCounts;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.notestore.NoteStore;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
-import com.evernote.thrift.TException;
-import com.evernote.thrift.transport.TTransportException;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -75,7 +67,7 @@ public class MainActivity extends DataActivity{
 					else
 					{//normally update content of a notebook
 						new UpdateNotebookList().execute();
-						
+						new DownloadNotes().execute(list_notebook_guid[position]);
 					}
 				}
 			});
@@ -87,11 +79,13 @@ public class MainActivity extends DataActivity{
 	private class DownloadNotes extends AsyncTask<String, Integer, Void>
 	{
 		ProgressBar progress_bar = null;
-		private final int progress_bar_max_value = 10000;
+		private final int progress_bar_max_value = 1000;
+		private static final String LogTag = "DownloadNotes";
 		@Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
+			Toast.makeText(getBaseContext(), R.string.text_download_note_finished, Toast.LENGTH_SHORT).show();
 		}
 
 		@Override
@@ -124,28 +118,46 @@ public class MainActivity extends DataActivity{
 				//set notebook filter
 				NoteFilter filter = new NoteFilter();
 				filter.setNotebookGuid(notebook_guid);
-				//get note list
+				//get note list information
 				int offset = 0;
-				List<Note> note_list = new ArrayList<Note>();
+				int max_note_number = 20000;
+				List<Note> cloud_note_list = new ArrayList<Note>();
 				NoteList list_buffer;
+				Log.i(LogTag, "Begin to download notebook :" + notebook_guid);
 				do
 				{
-					list_buffer = client.findNotes(auth_token, filter, offset, 20000);
+					list_buffer = client.findNotes(auth_token, filter, offset, max_note_number);
+					Log.i(LogTag, "Fetch head date of notes " + offset + " - " + (offset + list_buffer.getNotesSize()));
 					offset += list_buffer.getNotesSize();
-					note_list.addAll(list_buffer.getNotes());
+					cloud_note_list.addAll(list_buffer.getNotes());
 					//update progress
 					publishProgress(offset * progress_bar_max_value / list_buffer.getTotalNotes());
-				}while(list_buffer.getTotalNotes() > note_list.size());
+				}while(list_buffer.getTotalNotes() > cloud_note_list.size());
 				//get note content
 				database.open();
-				for(int index = 0; index < note_list.size(); index++)
+				//open local note
+				Map<String, NoteDbAdapter.NoteInfo> local_notes = database.getNote(notebook_guid);
+				for(int index = 0; index < cloud_note_list.size(); index++)
 				{
-					publishProgress(index);
-					//download content
-					Note note = note_list.get(index);
-					note.setContent(client.getNoteContent(auth_token, note.getGuid()));
-					//save to database
-					database.insertNote(note, note.getUpdated(), 0);
+					publishProgress(index * progress_bar_max_value / cloud_note_list.size());
+					Note note = cloud_note_list.get(index);
+					if(local_notes.containsKey(note.getGuid()))
+					{//update content of local note
+						if(local_notes.get(note.getGuid()).update_time < note.getUpdated())
+						{
+							database.updateNoteContent(note);
+							Log.i(LogTag, "Update note :" + note.getTitle() + " "
+									+ local_notes.get(note.getGuid()).update_time + " < " +
+									note.getUpdated());
+						}
+					}
+					else
+					{//download new content
+						note.setContent(client.getNoteContent(auth_token, note.getGuid()));
+						//save to database
+						database.insertNote(note, note.getUpdated(), 0);
+						Log.i(LogTag, "Download note : " + note.getTitle());
+					}
 				}
 					
 			}catch(Exception e) {
@@ -239,7 +251,6 @@ public class MainActivity extends DataActivity{
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				Log.e(LogTag, e.toString(), e);
-				database.close();
 			}finally{
 				database.close();
 				return null;

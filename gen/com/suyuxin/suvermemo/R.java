@@ -58,6 +58,7 @@ public final class R {
         public static final int esdk__evernote_login_successful=0x7f05000d;
         public static final int esdk__loading=0x7f050011;
         public static final int hello_world=0x7f050002;
+        public static final int text_download_note_finished=0x7f050013;
         public static final int text_empty_notebook_list=0x7f050004;
         public static final int text_load=0x7f050008;
         public static final int text_notebook_in_sync=0x7f050006;

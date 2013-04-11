@@ -29,6 +29,7 @@ public class DataActivity extends Activity {
 	
 	protected NoteDbAdapter database;
 	protected Map<String, NotebookInfo> notebook_info;// notebook_guid -> NotebookInfo
+	protected String[] list_notebook_guid;//used for ListView
 	//common used data
 	
 	@Override
@@ -54,6 +55,7 @@ public class DataActivity extends Activity {
 			return new String[]{getResources().getString(R.string.text_empty_notebook_list)};
 		}
 		String[] names = new String[notebook_info.size()];
+		list_notebook_guid = new String[notebook_info.size()];
 		int index = 0;
 		//iterate the map of notebook_info
 		Iterator<Entry<String, NotebookInfo>> iter_notebook = notebook_info.entrySet().iterator();
@@ -61,6 +63,7 @@ public class DataActivity extends Activity {
 		{
 			Entry<String, NotebookInfo> iter = iter_notebook.next();
 			names[index] = iter.getValue().name + " : " + iter.getValue().note_number;
+			list_notebook_guid[index] = iter.getKey();
 			index++;
 		}
 		database.close();

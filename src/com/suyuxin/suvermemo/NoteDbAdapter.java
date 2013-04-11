@@ -15,6 +15,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 
 public class NoteDbAdapter{
@@ -41,12 +42,12 @@ public class NoteDbAdapter{
 	{
 		String title;
 		String content;
-		int update_time;
-		int show_time;
+		long update_time;
+		long show_time;
 		int familiar_index;
 		
-		public NoteInfo(String title, String content, int update_time,
-				int show_time, int familiar_index)
+		public NoteInfo(String title, String content, long update_time,
+				long show_time, int familiar_index)
 		{
 			this.title = title;
 			this.content = content;
@@ -75,12 +76,12 @@ public class NoteDbAdapter{
 			+ COL_NOTE_NUMBER + " INTEGER);";
 	private static final String STRING_CREATE_NOTE = "CREATE TABLE " + TABLE_NAME_NOTE 
 			+ " ( " + COL_NOTE_GUID + " TEXT PRIMARY KEY, " 
-			+ COL_NOTEBOOK_GUID + " TEXT "
+			+ COL_NOTEBOOK_GUID + " TEXT, "
 			+ COL_TITLE + " TEXT, " 
 			+ COL_CONTENT + " TEXT, "
-			+ COL_CREATE_TIME + " INTEGER, "
-			+ COL_UPDATE_TIME + " INTEGER, "
-			+ COL_SHOW_TIME + " INTEGER, "
+			+ COL_CREATE_TIME + " DECIMAL(14,0), "
+			+ COL_UPDATE_TIME + " DECIMAL(14,0), "
+			+ COL_SHOW_TIME + " DECIMAL(14,0), "
 			+ COL_FAMILIAR_INDEX + " INTEGER);";
 	
 	public NoteDbAdapter(Context ctx)
@@ -106,6 +107,7 @@ public class NoteDbAdapter{
 		@Override
 		public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
 			// TODO Auto-generated method stub
+			
 
 		}
 
@@ -200,7 +202,7 @@ public class NoteDbAdapter{
 			do
 			{
 				map.put(cursor.getString(0), new NoteInfo(cursor.getString(1), cursor.getString(2),
-						cursor.getInt(3), cursor.getInt(4), cursor.getInt(5)));
+						cursor.getLong(3), cursor.getLong(4), cursor.getInt(5)));
 			}while(cursor.moveToNext());
 		}
 		return map;
@@ -222,7 +224,7 @@ public class NoteDbAdapter{
 			do
 			{
 				map.put(cursor.getString(0), new NoteInfo(cursor.getString(1), cursor.getString(2),
-						cursor.getInt(3), cursor.getInt(4), cursor.getInt(5)));
+						cursor.getLong(3), cursor.getLong(4), cursor.getInt(5)));
 			}while(cursor.moveToNext());
 		}
 		return map;
