@@ -8,12 +8,16 @@ import java.util.Map;
 import com.evernote.client.android.AsyncNoteStoreClient;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.client.android.OnClientCallback;
+import com.evernote.edam.error.EDAMNotFoundException;
+import com.evernote.edam.error.EDAMSystemException;
+import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.notestore.NoteCollectionCounts;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.notestore.NoteStore;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.Notebook;
+import com.evernote.thrift.TException;
 import com.evernote.thrift.transport.TTransportException;
 
 import android.os.AsyncTask;
@@ -21,6 +25,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,10 +70,12 @@ public class MainActivity extends DataActivity{
 						{
 							evernote_session.authenticate(getContext());
 						}
-						else
-						{
-							new UpdateNotebookList().execute();
-						}
+						new UpdateNotebookList().execute();
+					}
+					else
+					{//normally update content of a notebook
+						new UpdateNotebookList().execute();
+						
 					}
 				}
 			});
@@ -152,8 +159,9 @@ public class MainActivity extends DataActivity{
 		
 	}
 	
-	private class UpdateNotebookList extends AsyncTask<Void, Integer, String[]>
+	private class UpdateNotebookList extends AsyncTask<Void, Integer, Void>
 	{
+		private static final String LogTag = "UpdateNotebookList";
 		ProgressBar progress_bar = null;
 		private final int progress_bar_max_value = 200;
 		@Override
@@ -169,14 +177,14 @@ public class MainActivity extends DataActivity{
 		}
 
 		@Override
-		protected void onPostExecute(String[] names) {
+		protected void onPostExecute(Void names) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(names);
 			ListView view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
 			NotebookListAdapter adapter = new NotebookListAdapter(getBaseContext(),
 					R.layout.notebook_row,
 					R.id.text_notebook_name,
-					names);
+					getNotebookNames());
 			view_notebook_list.setAdapter(adapter);
 		}
 
@@ -189,43 +197,52 @@ public class MainActivity extends DataActivity{
 
 		@SuppressWarnings("finally")
 		@Override
-		protected String[] doInBackground(Void... arg0) {
+		protected Void doInBackground(Void... arg0) {
 			// TODO Auto-generated method stub	
 			String auth_token = evernote_session.getAuthToken();
-			NoteStore.Client client;
-			String[] notebook_names = null;
 			try {
-				client = evernote_session.getClientFactory().createNoteStoreClient().getClient();
-				List<Notebook> notebooks = client.listNotebooks(auth_token);
-				notebook_names = new String[notebooks.size()];
+				NoteStore.Client client = evernote_session.getClientFactory().createNoteStoreClient().getClient();
+				List<Notebook> cloud_notebooks = client.listNotebooks(auth_token);
 				//get count of notes in each notebook
-				Map<String, Integer> counts = client.findNoteCounts(auth_token, new NoteFilter(), false)
+				Map<String, Integer> cloud_counts = client.findNoteCounts(auth_token, new NoteFilter(), false)
 						.getNotebookCounts();
 				//update progress
 				publishProgress(progress_bar_max_value / 3);
 				//open database
 				database.open();
-				ListIterator<Notebook> iterator = notebooks.listIterator();
+				notebook_info = database.getNotebookList();
+				publishProgress(progress_bar_max_value / 2);
+				ListIterator<Notebook> iterator = cloud_notebooks.listIterator();
+				//for update progress
 				int index = 0;
-				int progress_slice = 2 * progress_bar_max_value / 3 / notebooks.size();
+				int progress_slice = progress_bar_max_value / (2 * cloud_notebooks.size());
 				while(iterator.hasNext())
 				{
 					Notebook notebook = iterator.next();
-					//get names to display
-					notebook_names[index] = notebook.getName();
-					index++;
-					//store into database
-					database.insertNotebook(notebook.getName(), notebook.getGuid(), counts.get(notebook.getGuid()));
+					String guid = notebook.getGuid();
+					if(notebook_info.containsKey(guid))
+					{
+						if(notebook_info.get(guid).note_number != cloud_counts.get(guid))
+						{//need to update
+							database.updateNotebook(notebook.getName(), guid, cloud_counts.get(guid));
+						}
+					}
+					else
+					{//store new notebook into database
+						database.insertNotebook(notebook.getName(), guid, cloud_counts.get(guid));
+					}
 					//update progress
-					publishProgress(progress_bar_max_value / 3 + progress_slice * index);
+					index++;
+					publishProgress(progress_bar_max_value / 2 + progress_slice * index);
 				}
 				publishProgress(progress_bar_max_value);
-			} catch (TTransportException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				Toast.makeText(getApplication(), R.string.error_list_notebooks, Toast.LENGTH_LONG).show();
+				Log.e(LogTag, e.toString(), e);
+				database.close();
 			}finally{
 				database.close();
-				return notebook_names;
+				return null;
 			}
 		}
 		

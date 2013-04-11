@@ -1,20 +1,19 @@
 package com.suyuxin.suvermemo;
 
 
-import java.util.List;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.evernote.client.android.EvernoteSession;
-import com.evernote.client.android.OnClientCallback;
 import com.evernote.edam.type.Notebook;
 import com.evernote.thrift.transport.TTransportException;
+import com.suyuxin.suvermemo.NoteDbAdapter.NotebookInfo;
 
 import android.os.Bundle;
 import android.widget.Toast;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.database.Cursor;
 
 
 @SuppressLint("ValidFragment")
@@ -29,6 +28,7 @@ public class DataActivity extends Activity {
 	protected EvernoteSession evernote_session;
 	
 	protected NoteDbAdapter database;
+	protected Map<String, NotebookInfo> notebook_info;// notebook_guid -> NotebookInfo
 	//common used data
 	
 	@Override
@@ -46,21 +46,22 @@ public class DataActivity extends Activity {
 	protected String[] getNotebookNames()
 	{
 		database.open();
-		Cursor cursor = database.getNotebookList();
+		notebook_info = database.getNotebookList();
 		//if the database is empty, return to the empty tag
-		if(cursor.getCount() == 0)
+		if(notebook_info.size() == 0)
 		{
 			database.close();
 			return new String[]{getResources().getString(R.string.text_empty_notebook_list)};
 		}
-		String[] names = new String[cursor.getCount()];
+		String[] names = new String[notebook_info.size()];
 		int index = 0;
-		if(cursor.moveToFirst())
+		//iterate the map of notebook_info
+		Iterator<Entry<String, NotebookInfo>> iter_notebook = notebook_info.entrySet().iterator();
+		while(iter_notebook.hasNext())
 		{
-			do {
-				names[index] = cursor.getString(1) + " : " + cursor.getString(2);
-				index++;
-			}while(cursor.moveToNext());
+			Entry<String, NotebookInfo> iter = iter_notebook.next();
+			names[index] = iter.getValue().name + " : " + iter.getValue().note_number;
+			index++;
 		}
 		database.close();
 		return names;
