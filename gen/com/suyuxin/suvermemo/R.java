@@ -41,25 +41,31 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int row_background_pressed=0x7f020004;
     }
     public static final class id {
-        public static final int action_settings=0x7f09000b;
-        public static final int button_notebook_enter=0x7f090008;
-        public static final int button_notebook_sync=0x7f090009;
-        public static final int esdk__switch_service=0x7f09000a;
+        public static final int action_settings=0x7f09000f;
+        public static final int button_note_next=0x7f090009;
+        public static final int button_notebook_enter=0x7f09000c;
+        public static final int button_notebook_sync=0x7f09000d;
+        public static final int esdk__switch_service=0x7f09000e;
         public static final int esdk__webview=0x7f090004;
-        public static final int image_notebook=0x7f090006;
+        public static final int image_notebook=0x7f09000a;
         public static final int listView_notebook=0x7f090001;
         public static final int pager=0x7f090002;
         public static final int pager_title_strip=0x7f090003;
         public static final int progressBar_sync=0x7f090000;
+        public static final int ratingBar_study_result=0x7f090008;
         public static final int section_label=0x7f090005;
-        public static final int text_notebook_name=0x7f090007;
+        public static final int textView_label_evaluate=0x7f090007;
+        public static final int textView_note_statistics=0x7f090006;
+        public static final int text_notebook_name=0x7f09000b;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int activity_note=0x7f030001;
         public static final int esdk__webview=0x7f030002;
         public static final int fragment_note_dummy=0x7f030003;
-        public static final int notebook_row=0x7f030004;
+        public static final int fragment_note_head=0x7f030004;
+        public static final int fragment_note_tail=0x7f030005;
+        public static final int notebook_row=0x7f030006;
     }
     public static final class menu {
         public static final int esdk__oauth=0x7f080000;
@@ -81,12 +87,15 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int esdk__evernote_login_successful=0x7f06000d;
         public static final int esdk__loading=0x7f060011;
         public static final int hello_world=0x7f060002;
+        public static final int label_evaluate_note=0x7f06001c;
+        public static final int text_button_note_next=0x7f06001b;
         public static final int text_download_note_finished=0x7f060013;
         public static final int text_empty_notebook_list=0x7f060004;
         public static final int text_load=0x7f060008;
         public static final int text_notebook_enter=0x7f06001a;
         public static final int text_notebook_in_sync=0x7f060006;
         public static final int text_notebook_sync=0x7f060005;
+        public static final int titile_evaluation_statistics=0x7f06001d;
         public static final int title_activity_data=0x7f060007;
         public static final int title_activity_note=0x7f060014;
         public static final int title_activity_notebook_list=0x7f060003;

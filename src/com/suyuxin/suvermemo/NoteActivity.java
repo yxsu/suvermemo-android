@@ -1,20 +1,24 @@
 package com.suyuxin.suvermemo;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -23,21 +27,15 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+@SuppressLint("ValidFragment")
 public class NoteActivity extends FragmentActivity {
-
-	/**
-	 * The {@link android.support.v4.view.PagerAdapter} that will provide
-	 * fragments for each of the sections. We use a
-	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
-	 * will keep every loaded fragment in memory. If this becomes too memory
-	 * intensive, it may be best to switch to a
-	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-	 */
-	SectionsPagerAdapter mSectionsPagerAdapter;
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -46,7 +44,29 @@ public class NoteActivity extends FragmentActivity {
 	
 	String notebook_guid;
 	protected NoteDbAdapter database;
-	protected List<Entry<String, NoteDbAdapter.NoteInfo>> list_notes;
+	SectionsPagerAdapter pager_adapter;
+	protected Queue<Entry<String, NoteDbAdapter.NoteInfo>> queue_notes;
+	protected RatingBar rating_bar;
+	protected int count_total_note;//total number of notes in this notebook
+	protected int count_total_today_note;
+	
+	protected OnClickListener listener_next_note = new OnClickListener()
+	{
+
+		@Override
+		public void onClick(View arg0) {
+			// TODO Auto-generated method stub
+			//rating
+			float rating = rating_bar.getRating() / rating_bar.getNumStars();
+			queue_notes.remove();
+			//set the next note
+			
+			pager_adapter.updateContent(queue_notes.element().getValue().title,
+					queue_notes.element().getValue().content);
+			mViewPager.setCurrentItem(0);
+		}
+		
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,20 +74,21 @@ public class NoteActivity extends FragmentActivity {
 		setContentView(R.layout.activity_note);
 		//receive data
 		notebook_guid = getIntent().getStringExtra("notebook_guid");
+		count_total_note = getIntent().getIntExtra("notebook_count", 0);
 		//create read date
 		database = new NoteDbAdapter(this);
 		updateNoteList();
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
-		
-		mSectionsPagerAdapter = new SectionsPagerAdapter(
-				getSupportFragmentManager(), 
-				list_notes.get(0).getValue().title, 
-				SplitNoteContent(list_notes.get(0).getValue().content));
-
+	
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		pager_adapter = new SectionsPagerAdapter(
+				getSupportFragmentManager(), 
+				queue_notes.element().getValue().title, 
+				queue_notes.element().getValue().content);
+		mViewPager.setAdapter(pager_adapter);
+		
 
 	}
 	
@@ -76,12 +97,13 @@ public class NoteActivity extends FragmentActivity {
 		database.open();
 		Iterator<Entry<String, NoteDbAdapter.NoteInfo>> iter = 
 				database.getNote(notebook_guid).entrySet().iterator();
-		list_notes = new LinkedList<Entry<String, NoteDbAdapter.NoteInfo>>();
+		queue_notes = new LinkedList<Entry<String, NoteDbAdapter.NoteInfo>>();
 		while(iter.hasNext())
 		{
-			list_notes.add(iter.next());
+			queue_notes.add(iter.next());
 		}
 		database.close();
+		count_total_today_note = queue_notes.size();
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -90,33 +112,7 @@ public class NoteActivity extends FragmentActivity {
 		return true;
 	}
 	
-	private String[] SplitNoteContent(String content)
-	{
-		//set font size
-		int position = content.indexOf("<en-note style=") + 16;
-		content = content.substring(0, position) + "font-size: "
-				+ getResources().getDimensionPixelSize(R.dimen.note_font_size) 
-				+ "pt; " + content.substring(position);
-		Log.i("NoteActivity", content);
-		//find answers
-		Pattern font_style = Pattern.compile("<font color.*?</font>");
-		Matcher matcher = font_style.matcher(content);
-		List<String> answer = new ArrayList<String>();
-		while(matcher.find())
-		{
-			String result = matcher.group();
-			result = result.substring(22, result.length() - 7);
-			answer.add(result);
-		}
-		String[] questions = new String[answer.size() + 1];
-		questions[questions.length - 1] = content;
-		for(int index = answer.size() - 1; index >= 0; index--)
-		{
-			content = content.replace(answer.get(index), "[......]");
-			questions[index] = content;
-		}
-		return questions;
-	}
+	
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -126,17 +122,81 @@ public class NoteActivity extends FragmentActivity {
 
 		private String[] contents;
 		private String title;
-		public SectionsPagerAdapter(FragmentManager fm, String title, String[] contents) {
+		public SectionsPagerAdapter(FragmentManager fm, String title, String content) {
 			super(fm);
 			this.title = title;
-			this.contents = contents;
+			contents = SplitNoteContent(content);
 		}
 
 		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			// TODO Auto-generated method stub
+			super.destroyItem(container, position, object);
+			if(position < getCount())
+			{
+				FragmentManager manager = ((Fragment)object).getFragmentManager();
+				FragmentTransaction trans = manager.beginTransaction();
+				trans.remove((Fragment)object);
+				trans.commit();
+			}
+		}
+
+		public void updateContent(String title, String content)
+		{
+			//destroy all existing fragments
+			for(int i = 0; i < getCount(); i++)
+			{
+				Object object = this.instantiateItem(mViewPager, i);
+				if(object != null)
+				{
+					this.destroyItem(mViewPager, i, object);
+				}
+			}
+			this.title = title;
+			this.contents = SplitNoteContent(content);
+			//re instantiate item
+			for(int i = 0; i < getCount(); i++)
+			{
+				this.instantiateItem(mViewPager, i);
+			}
+			notifyDataSetChanged();
+		}
+		
+		private String[] SplitNoteContent(String content)
+		{
+			//set font size
+			int position = content.indexOf("<en-note style=") + 16;
+			content = content.substring(0, position) + "font-size: "
+					+ getResources().getDimensionPixelSize(R.dimen.note_font_size) 
+					+ "pt; " + content.substring(position);
+			Log.i("SplitNoteContent", content);
+			//find answers
+			Pattern font_style = Pattern.compile("<font color.*?</font>");
+			Matcher matcher = font_style.matcher(content);
+			List<String> answer = new ArrayList<String>();
+			while(matcher.find())
+			{
+				String result = matcher.group();
+				result = result.substring(22, result.length() - 7);
+				if(result.startsWith("<") && result.endsWith("/>"))
+					continue;
+				
+				answer.add(result);
+			}
+			//replace
+			String[] questions = new String[answer.size() + 1];
+			questions[questions.length - 1] = content;
+			for(int index = answer.size() - 1; index >= 0; index--)
+			{
+				content = content.replace(answer.get(index), "[......]");
+				questions[index] = content;
+			}
+			return questions;
+		}
+		
+		@Override
 		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
-			// Return a DummySectionFragment (defined as a static inner class
-			// below) with the page number as its lone argument.
 			Fragment fragment = new DummySectionFragment();
 			Bundle args = new Bundle();
 			if(position == 0)
@@ -165,6 +225,9 @@ public class NoteActivity extends FragmentActivity {
 
 		@Override
 		public CharSequence getPageTitle(int position) {
+			if(position == getCount() - 1)
+				return getResources().getString(R.string.titile_evaluation_statistics);
+			
 			if(position % 2 == 0)
 				return title;
 			else
@@ -176,7 +239,7 @@ public class NoteActivity extends FragmentActivity {
 	 * A dummy fragment representing a section of the app, but that simply
 	 * displays dummy text.
 	 */
-	public static class DummySectionFragment extends Fragment {
+	public class DummySectionFragment extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
@@ -193,18 +256,34 @@ public class NoteActivity extends FragmentActivity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_note_dummy,
-					container, false);
 			if(getArguments().getString(ARG_SECTION_TYPE) == ARG_SECTION_NORMAL)
 			{
+				View rootView = inflater.inflate(R.layout.fragment_note_dummy,
+						container, false);
 				WebView view = (WebView) rootView
 						.findViewById(R.id.section_label);
 				//dummyTextView.setText(getArguments().getString(ARG_SECTION_CONTENT));
 				view.loadData(getArguments().getString(ARG_SECTION_CONTENT),
 						"text/html", null);
-				
+				return rootView;
+			}else if(getArguments().getString(ARG_SECTION_TYPE) == ARG_SECTION_TAIL)
+			{
+				View rootView = inflater.inflate(R.layout.fragment_note_tail, container, false);
+				rating_bar = (RatingBar)rootView.findViewById(R.id.ratingBar_study_result);
+				Button next = (Button)rootView.findViewById(R.id.button_note_next);
+				next.setOnClickListener(listener_next_note);
+				TextView statistics_info = (TextView)rootView.findViewById(R.id.textView_note_statistics);
+				statistics_info.setText("Finished: " + (count_total_today_note - queue_notes.size()) + "\n"
+						+"Today's Task: " + count_total_today_note + "\n"
+						+"Notebook: " + count_total_note);
+				return rootView;
 			}
-			return rootView;
+			else
+			{
+				View rootView = inflater.inflate(R.layout.fragment_note_head, container, false);
+				
+				return rootView;
+			}
 		}
 	}
 

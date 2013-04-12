@@ -28,5 +28,8 @@
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="text_notebook_enter">Enter</string>
+    <string name="text_button_note_next">To Next Note</string>
+    <string name="label_evaluate_note">Evaluate This Note:</string>
+    <string name="titile_evaluation_statistics">Evaluation and Statistics</string>
 
 </resources>

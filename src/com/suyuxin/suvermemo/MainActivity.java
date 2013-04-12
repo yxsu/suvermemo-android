@@ -81,6 +81,8 @@ public class MainActivity extends DataActivity{
 					// TODO Auto-generated method stub
 					Intent intent = new Intent(getContext(), NoteActivity.class);
 					intent.putExtra("notebook_guid", list_notebook_guid[position]);
+					intent.putExtra("notebook_count", 
+						notebook_info.get(list_notebook_guid[position]).note_number);
 					startActivity(intent);
 				}
 			});
