@@ -60,10 +60,13 @@ public class NoteActivity extends FragmentActivity {
 			float rating = rating_bar.getRating() / rating_bar.getNumStars();
 			queue_notes.remove();
 			//set the next note
-			
-			pager_adapter.updateContent(queue_notes.element().getValue().title,
-					queue_notes.element().getValue().content);
-			mViewPager.setCurrentItem(0);
+			pager_adapter.destroyAllItem();
+			pager_adapter.notifyDataSetChanged();
+			pager_adapter = new SectionsPagerAdapter(getSupportFragmentManager(), 
+				queue_notes.element().getValue().title, 
+				queue_notes.element().getValue().content);
+			mViewPager.setAdapter(pager_adapter);
+			pager_adapter.notifyDataSetChanged();
 		}
 		
 	};
@@ -122,44 +125,26 @@ public class NoteActivity extends FragmentActivity {
 
 		private String[] contents;
 		private String title;
+		private FragmentTransaction current_transaction;
 		public SectionsPagerAdapter(FragmentManager fm, String title, String content) {
 			super(fm);
 			this.title = title;
 			contents = SplitNoteContent(content);
 		}
 
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			// TODO Auto-generated method stub
-			super.destroyItem(container, position, object);
-			if(position < getCount())
-			{
-				FragmentManager manager = ((Fragment)object).getFragmentManager();
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.remove((Fragment)object);
-				trans.commit();
-			}
-		}
-
-		public void updateContent(String title, String content)
+		public void destroyAllItem()
 		{
-			//destroy all existing fragments
+			current_transaction = getSupportFragmentManager().beginTransaction();
 			for(int i = 0; i < getCount(); i++)
 			{
 				Object object = this.instantiateItem(mViewPager, i);
 				if(object != null)
 				{
-					this.destroyItem(mViewPager, i, object);
+					current_transaction.remove((Fragment)object);
 				}
 			}
-			this.title = title;
-			this.contents = SplitNoteContent(content);
-			//re instantiate item
-			for(int i = 0; i < getCount(); i++)
-			{
-				this.instantiateItem(mViewPager, i);
-			}
-			notifyDataSetChanged();
+			current_transaction.commit();
+			getSupportFragmentManager().executePendingTransactions();
 		}
 		
 		private String[] SplitNoteContent(String content)
