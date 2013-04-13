@@ -249,7 +249,7 @@ public class NoteActivity extends FragmentActivity {
 						.findViewById(R.id.section_label);
 				//dummyTextView.setText(getArguments().getString(ARG_SECTION_CONTENT));
 				view.loadData(getArguments().getString(ARG_SECTION_CONTENT),
-						"text/html", null);
+						"text/html; charset=UTF-8", null);
 				return rootView;
 			}else if(getArguments().getString(ARG_SECTION_TYPE) == ARG_SECTION_TAIL)
 			{
