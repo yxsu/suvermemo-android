@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.evernote.edam.type.Note;
 
@@ -16,6 +17,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.util.Pair;
 
 
 public class NoteDbAdapter{
@@ -208,7 +210,7 @@ public class NoteDbAdapter{
 		return map;
 	}
 	
-	public Map<String, NoteInfo> getOutOfDateNote(String notebook_guid)
+	public List<Pair<String, NoteInfo>> getOutOfDateNote(String notebook_guid)
 	{
 		//get the time of right now
 		long now = Calendar.getInstance().getTimeInMillis();
@@ -216,18 +218,18 @@ public class NoteDbAdapter{
 		Cursor cursor = db.query(TABLE_NAME_NOTE, 
 				new String[]{COL_NOTE_GUID, COL_TITLE, COL_CONTENT, COL_UPDATE_TIME, COL_SHOW_TIME, COL_FAMILIAR_INDEX},
 				COL_NOTEBOOK_GUID + " ='" + notebook_guid + "' and " + COL_SHOW_TIME + " < " + now,
-				null, null, null, null);
+				null, null, null, COL_SHOW_TIME);
 		//copy to hash map
-		Map<String, NoteInfo> map = new HashMap<String, NoteInfo>();//note_guid -> NoteInfo
+		List<Pair<String, NoteInfo>> ordered_list = new ArrayList<Pair<String, NoteInfo>>();//note_guid -> NoteInfo
 		if(cursor.moveToFirst())
 		{
 			do
 			{
-				map.put(cursor.getString(0), new NoteInfo(cursor.getString(1), cursor.getString(2),
-						cursor.getLong(3), cursor.getLong(4), cursor.getInt(5)));
+				ordered_list.add(Pair.create(cursor.getString(0), new NoteInfo(cursor.getString(1), cursor.getString(2),
+						cursor.getLong(3), cursor.getLong(4), cursor.getInt(5))));
 			}while(cursor.moveToNext());
 		}
-		return map;
+		return ordered_list;
 	}
 	
 }

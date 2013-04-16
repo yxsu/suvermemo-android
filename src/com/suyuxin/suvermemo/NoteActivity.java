@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -22,6 +23,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,7 +47,7 @@ public class NoteActivity extends FragmentActivity {
 	String notebook_guid;
 	protected NoteDbAdapter database;
 	SectionsPagerAdapter pager_adapter;
-	protected Queue<Entry<String, NoteDbAdapter.NoteInfo>> queue_notes;
+	protected Queue<Pair<String, NoteDbAdapter.NoteInfo>> queue_notes;//pair<guid, note_info>
 	protected RatingBar rating_bar;
 	protected int count_total_note;//total number of notes in this notebook
 	protected int count_total_today_note;
@@ -58,15 +60,31 @@ public class NoteActivity extends FragmentActivity {
 			// TODO Auto-generated method stub
 			//rating
 			float rating = rating_bar.getRating() / rating_bar.getNumStars();
-			queue_notes.remove();
+			long one_day = 24*60*60*1000;
+			//calculate the next show time
+			Pair<String, NoteDbAdapter.NoteInfo> current_note = queue_notes.remove();
+			int new_familiar_index = (int)(20 * ((float)current_note.second.familiar_index/10
+						+ rating) * rating);
+			long new_show_time = new_familiar_index * one_day / 10 + current_note.second.show_time;
+			//save the new show time and familiar index
+			database.open();
+			database.updateNoteShowTime(current_note.first, new_show_time, new_familiar_index);
+			database.close();
 			//set the next note
-			pager_adapter.destroyAllItem();
-			pager_adapter.notifyDataSetChanged();
-			pager_adapter = new SectionsPagerAdapter(getSupportFragmentManager(), 
-				queue_notes.element().getValue().title, 
-				queue_notes.element().getValue().content);
-			mViewPager.setAdapter(pager_adapter);
-			pager_adapter.notifyDataSetChanged();
+			if(!queue_notes.isEmpty())
+			{
+				pager_adapter.destroyAllItem();
+				pager_adapter.notifyDataSetChanged();
+				pager_adapter = new SectionsPagerAdapter(getSupportFragmentManager(), 
+						queue_notes.element().second.title, 
+						queue_notes.element().second.content);
+				mViewPager.setAdapter(pager_adapter);
+				pager_adapter.notifyDataSetChanged();
+			}
+			else
+			{
+				startActivity(new Intent(getBaseContext(), MainActivity.class));
+			}
 		}
 		
 	};
@@ -88,8 +106,8 @@ public class NoteActivity extends FragmentActivity {
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		pager_adapter = new SectionsPagerAdapter(
 				getSupportFragmentManager(), 
-				queue_notes.element().getValue().title, 
-				queue_notes.element().getValue().content);
+				queue_notes.element().second.title, 
+				queue_notes.element().second.content);
 		mViewPager.setAdapter(pager_adapter);
 		
 
@@ -98,9 +116,9 @@ public class NoteActivity extends FragmentActivity {
 	private void updateNoteList()
 	{
 		database.open();
-		Iterator<Entry<String, NoteDbAdapter.NoteInfo>> iter = 
-				database.getNote(notebook_guid).entrySet().iterator();
-		queue_notes = new LinkedList<Entry<String, NoteDbAdapter.NoteInfo>>();
+		Iterator<Pair<String, NoteDbAdapter.NoteInfo>> iter = 
+				database.getOutOfDateNote(notebook_guid).iterator();
+		queue_notes = new LinkedList<Pair<String, NoteDbAdapter.NoteInfo>>();
 		while(iter.hasNext())
 		{
 			queue_notes.add(iter.next());
