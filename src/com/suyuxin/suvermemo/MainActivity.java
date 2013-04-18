@@ -1,9 +1,11 @@
 package com.suyuxin.suvermemo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.notestore.NoteFilter;
@@ -17,6 +19,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +35,8 @@ import android.widget.Toast;
 
 public class MainActivity extends DataActivity{
 	
+	private SharedPreferences status;
+	private static final String NOTEBOOK_STATUS = "notebook_status";//used for shared preferences
 	
 	private class NotebookListAdapter extends ArrayAdapter<String> {
 
@@ -86,20 +91,38 @@ public class MainActivity extends DataActivity{
 					startActivity(intent);
 				}
 			});
+			//test whether to show "enter" button
+			Set<String> downloaded_notebook = status.getStringSet(NOTEBOOK_STATUS, new HashSet<String>());
+			if(downloaded_notebook.contains(list_notebook_guid[position]))
+				enter.setVisibility(Button.VISIBLE);
+			else
+				enter.setVisibility(Button.INVISIBLE);
+			
 			return convertView;
 		}
 		
 	}
 	
-	private class DownloadNotes extends AsyncTask<String, Integer, Void>
+	private class DownloadNotes extends AsyncTask<String, Integer, String>
 	{
 		ProgressBar progress_bar = null;
 		private final int progress_bar_max_value = 1000;
 		private static final String LogTag = "DownloadNotes";
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
+			//store this info of this notebook into shared preferences
+			Set<String> set_guid;
+			if(status.contains(NOTEBOOK_STATUS))
+				set_guid = status.getStringSet(NOTEBOOK_STATUS, null);
+			else
+				set_guid = new HashSet<String>();
+			//store
+			set_guid.add(result);
+			SharedPreferences.Editor editor = status.edit();
+			editor.putStringSet(NOTEBOOK_STATUS, set_guid);
+			editor.commit();
 			Toast.makeText(getBaseContext(), R.string.text_download_note_finished, Toast.LENGTH_SHORT).show();
 		}
 
@@ -124,7 +147,7 @@ public class MainActivity extends DataActivity{
 
 		@SuppressWarnings("finally")
 		@Override
-		protected Void doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			String auth_token = evernote_session.getAuthToken();
 			String notebook_guid = params[0];
@@ -180,7 +203,7 @@ public class MainActivity extends DataActivity{
 				
 			}finally {
 				database.close();
-				return null;	
+				return notebook_guid;	
 			}
 		}
 		
@@ -213,6 +236,7 @@ public class MainActivity extends DataActivity{
 					R.id.text_notebook_name,
 					getNotebookNames());
 			view_notebook_list.setAdapter(adapter);
+			adapter.notifyDataSetChanged();
 		}
 
 		@Override
@@ -277,6 +301,7 @@ public class MainActivity extends DataActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		status = getPreferences(Activity.MODE_PRIVATE);
 		//set adapter of notebook list
 		setContentView(R.layout.activity_main);
 		ListView view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
