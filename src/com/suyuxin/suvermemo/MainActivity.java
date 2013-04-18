@@ -183,10 +183,11 @@ public class MainActivity extends DataActivity{
 					{//update content of local note
 						if(local_notes.get(note.getGuid()).update_time < note.getUpdated())
 						{
+							note.setContent(client.getNoteContent(auth_token, note.getGuid()));
 							database.updateNoteContent(note);
 							Log.i(LogTag, "Update note :" + note.getTitle() + " "
 									+ local_notes.get(note.getGuid()).update_time + " < " +
-									note.getUpdated());
+									note.getUpdated() + "and content is " + note.getContent());
 						}
 					}
 					else
@@ -235,8 +236,8 @@ public class MainActivity extends DataActivity{
 					R.layout.notebook_row,
 					R.id.text_notebook_name,
 					getNotebookNames());
-			view_notebook_list.setAdapter(adapter);
 			adapter.notifyDataSetChanged();
+			view_notebook_list.setAdapter(adapter);
 		}
 
 		@Override
