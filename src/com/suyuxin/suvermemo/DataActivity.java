@@ -3,6 +3,7 @@ package com.suyuxin.suvermemo;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import com.evernote.client.android.EvernoteSession;
@@ -30,6 +31,7 @@ public class DataActivity extends Activity {
 	protected NoteDbAdapter database;
 	protected Map<String, NotebookInfo> notebook_info;// notebook_guid -> NotebookInfo
 	protected String[] list_notebook_guid;//used for ListView
+	protected Set<String> notebooks_having_local_contents;
 	//common used data
 	
 	@Override
@@ -40,7 +42,10 @@ public class DataActivity extends Activity {
 				CONSUMER_KEY, CONSUMER_SECRET, EVERNOTE_SERVICE);
 		//set database
 		database = new NoteDbAdapter(this);
-		
+		database.open();
+		//read notebook status
+		notebooks_having_local_contents = database.getNotebooksHavingContents();
+		database.close();
 		
 	}
 	

@@ -24,12 +24,11 @@
     <string name="title_activity_note">NoteActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
     <string name="text_notebook_enter">Enter</string>
     <string name="text_button_note_next">To Next Note</string>
     <string name="label_evaluate_note">Evaluate This Note:</string>
     <string name="titile_evaluation_statistics">Evaluation and Statistics</string>
+    <string name="text_need_sync_again">Notes have not been downloaded completely! Please press Sync again.</string>
+    <string name="text_wait_for_download">Please wait for downloading patiently!</string>
 
 </resources>

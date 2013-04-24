@@ -35,9 +35,8 @@ import android.widget.Toast;
 
 public class MainActivity extends DataActivity{
 	
-	private SharedPreferences status;
-	private static final String NOTEBOOK_STATUS = "notebook_status";//used for shared preferences
-	
+	private ListView view_notebook_list;
+	private boolean in_sync = false;
 	private class NotebookListAdapter extends ArrayAdapter<String> {
 
 		public NotebookListAdapter(Context context, int resource,
@@ -63,6 +62,11 @@ public class MainActivity extends DataActivity{
 				@Override
 				public void onClick(View arg0) {
 					// TODO Auto-generated method stub
+					if(in_sync)
+					{
+						Toast.makeText(getBaseContext(), R.string.text_wait_for_download, Toast.LENGTH_LONG).show();
+						return;
+					}
 					if(getItem(position).equals(getResources().getString(R.string.text_empty_notebook_list)))
 					{
 						if(!evernote_session.isLoggedIn())
@@ -79,11 +83,17 @@ public class MainActivity extends DataActivity{
 				}
 			});
 			Button enter = (Button)convertView.findViewById(R.id.button_notebook_enter);
+			enter.setVisibility(Button.INVISIBLE);
 			enter.setOnClickListener(new View.OnClickListener() {
 				
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
+					if(in_sync)
+					{
+						Toast.makeText(getBaseContext(), R.string.text_wait_for_download, Toast.LENGTH_LONG).show();
+						return;
+					}
 					Intent intent = new Intent(getContext(), NoteActivity.class);
 					intent.putExtra("notebook_guid", list_notebook_guid[position]);
 					intent.putExtra("notebook_count", 
@@ -92,15 +102,40 @@ public class MainActivity extends DataActivity{
 				}
 			});
 			//test whether to show "enter" button
-			Set<String> downloaded_notebook = status.getStringSet(NOTEBOOK_STATUS, new HashSet<String>());
-			if(downloaded_notebook.contains(list_notebook_guid[position]))
-				enter.setVisibility(Button.VISIBLE);
-			else
-				enter.setVisibility(Button.INVISIBLE);
-			
+			if(list_notebook_guid != null)
+			{
+				if(notebooks_having_local_contents.contains(list_notebook_guid[position]))
+					enter.setVisibility(Button.VISIBLE);
+				else
+					enter.setVisibility(Button.INVISIBLE);
+			}
 			return convertView;
 		}
 		
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		//store the status
+	}
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		//
+		view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
+		NotebookListAdapter adapter = new NotebookListAdapter(this,
+				R.layout.notebook_row,
+				R.id.text_notebook_name,
+				getNotebookNames());
+		view_notebook_list.setAdapter(adapter);
+	}
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
 	}
 	
 	private class DownloadNotes extends AsyncTask<String, Integer, String>
@@ -113,19 +148,15 @@ public class MainActivity extends DataActivity{
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			//store this info of this notebook into shared preferences
-			Set<String> set_guid;
-			if(status.contains(NOTEBOOK_STATUS))
-				set_guid = status.getStringSet(NOTEBOOK_STATUS, null);
+			if(progress_bar.getProgress() < progress_bar_max_value)
+				Toast.makeText(getBaseContext(), R.string.text_need_sync_again, Toast.LENGTH_LONG).show();
 			else
-				set_guid = new HashSet<String>();
-			//store
-			set_guid.add(result);
-			SharedPreferences.Editor editor = status.edit();
-			editor.putStringSet(NOTEBOOK_STATUS, set_guid);
-			editor.commit();
-			Toast.makeText(getBaseContext(), R.string.text_download_note_finished, Toast.LENGTH_SHORT).show();
+			{
+				notebooks_having_local_contents.add(result);
+				Toast.makeText(getBaseContext(), R.string.text_download_note_finished, Toast.LENGTH_SHORT).show();
+			}
+			in_sync = false;
 		}
-
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -136,6 +167,7 @@ public class MainActivity extends DataActivity{
 			}
 			progress_bar.setMax(progress_bar_max_value);
 			progress_bar.setProgress(0);
+			in_sync = true;
 		}
 
 		@Override
@@ -162,14 +194,15 @@ public class MainActivity extends DataActivity{
 				List<Note> cloud_note_list = new ArrayList<Note>();
 				NoteList list_buffer;
 				Log.i(LogTag, "Begin to download notebook :" + notebook_guid);
+				publishProgress(0);
 				do
 				{
 					list_buffer = client.findNotes(auth_token, filter, offset, max_note_number);
-					Log.i(LogTag, "Fetch head date of notes " + offset + " - " + (offset + list_buffer.getNotesSize()));
 					offset += list_buffer.getNotesSize();
 					cloud_note_list.addAll(list_buffer.getNotes());
 					//update progress
 					publishProgress(offset * progress_bar_max_value / list_buffer.getTotalNotes());
+					Log.i(LogTag, "Fetch head date of notes " + offset + " - " + (offset + list_buffer.getNotesSize()));
 				}while(list_buffer.getTotalNotes() > cloud_note_list.size());
 				//get note content
 				database.open();
@@ -177,7 +210,6 @@ public class MainActivity extends DataActivity{
 				Map<String, NoteDbAdapter.NoteInfo> local_notes = database.getNote(notebook_guid);
 				for(int index = 0; index < cloud_note_list.size(); index++)
 				{
-					publishProgress(index * progress_bar_max_value / cloud_note_list.size());
 					Note note = cloud_note_list.get(index);
 					if(local_notes.containsKey(note.getGuid()))
 					{//update content of local note
@@ -185,9 +217,9 @@ public class MainActivity extends DataActivity{
 						{
 							note.setContent(client.getNoteContent(auth_token, note.getGuid()));
 							database.updateNoteContent(note);
-							Log.i(LogTag, "Update note :" + note.getTitle() + " "
-									+ local_notes.get(note.getGuid()).update_time + " < " +
-									note.getUpdated() + "and content is " + note.getContent());
+							//
+							publishProgress(index * progress_bar_max_value / cloud_note_list.size());
+							Log.i(LogTag, "Update note : " + note.getTitle());
 						}
 					}
 					else
@@ -195,9 +227,12 @@ public class MainActivity extends DataActivity{
 						note.setContent(client.getNoteContent(auth_token, note.getGuid()));
 						//save to database
 						database.insertNote(note, note.getUpdated(), 0);
+						//
+						publishProgress(index * progress_bar_max_value / cloud_note_list.size());
 						Log.i(LogTag, "Download note : " + note.getTitle());
 					}
 				}
+				publishProgress(progress_bar_max_value);
 					
 			}catch(Exception e) {
 				Toast.makeText(getApplication(), R.string.error_download_note, Toast.LENGTH_LONG).show();
@@ -302,10 +337,9 @@ public class MainActivity extends DataActivity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		status = getPreferences(Activity.MODE_PRIVATE);
 		//set adapter of notebook list
 		setContentView(R.layout.activity_main);
-		ListView view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
+		view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
 		NotebookListAdapter adapter = new NotebookListAdapter(this,
 				R.layout.notebook_row,
 				R.id.text_notebook_name,

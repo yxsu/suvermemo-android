@@ -87,21 +87,20 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int esdk__evernote_login_successful=0x7f06000d;
         public static final int esdk__loading=0x7f060011;
         public static final int hello_world=0x7f060002;
-        public static final int label_evaluate_note=0x7f06001c;
-        public static final int text_button_note_next=0x7f06001b;
+        public static final int label_evaluate_note=0x7f060019;
+        public static final int text_button_note_next=0x7f060018;
         public static final int text_download_note_finished=0x7f060013;
         public static final int text_empty_notebook_list=0x7f060004;
         public static final int text_load=0x7f060008;
-        public static final int text_notebook_enter=0x7f06001a;
+        public static final int text_need_sync_again=0x7f06001b;
+        public static final int text_notebook_enter=0x7f060017;
         public static final int text_notebook_in_sync=0x7f060006;
         public static final int text_notebook_sync=0x7f060005;
-        public static final int titile_evaluation_statistics=0x7f06001d;
+        public static final int text_wait_for_download=0x7f06001c;
+        public static final int titile_evaluation_statistics=0x7f06001a;
         public static final int title_activity_data=0x7f060007;
         public static final int title_activity_note=0x7f060014;
         public static final int title_activity_notebook_list=0x7f060003;
-        public static final int title_section1=0x7f060017;
-        public static final int title_section2=0x7f060018;
-        public static final int title_section3=0x7f060019;
     }
     public static final class style {
         /** 

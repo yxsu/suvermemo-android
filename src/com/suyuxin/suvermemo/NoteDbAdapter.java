@@ -3,9 +3,11 @@ package com.suyuxin.suvermemo;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.evernote.edam.type.Note;
 
@@ -190,6 +192,20 @@ public class NoteDbAdapter{
 		values.put(COL_SHOW_TIME, show_time);
 		values.put(COL_FAMILIAR_INDEX, familiar_index);
 		return db.update(TABLE_NAME_NOTE, values, COL_NOTE_GUID + "='" + note_guid + "'", null) > 0;
+	}
+	
+	public Set<String> getNotebooksHavingContents()
+	{
+		Cursor cursor = db.query(TABLE_NAME_NOTE, new String[]{COL_NOTEBOOK_GUID}, null, null, null, null, null, null);
+		Set<String> guid_notebook = new HashSet<String>();
+		if(cursor.moveToFirst())
+		{
+			do
+			{
+				guid_notebook.add(cursor.getString(0));
+			}while(cursor.moveToNext());
+		}
+		return guid_notebook;
 	}
 	
 	public Map<String, NoteInfo> getNote(String notebook_guid)
