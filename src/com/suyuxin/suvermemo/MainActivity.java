@@ -42,7 +42,6 @@ public class MainActivity extends DataActivity{
 			Intent intent = new Intent(this, ServiceDownloadSound.class);
 			intent.putExtra("word", iter.next());
 			startService(intent);
-			break;
 		}
 	}
 	private class NotebookListAdapter extends ArrayAdapter<String> {

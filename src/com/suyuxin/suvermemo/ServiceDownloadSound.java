@@ -59,7 +59,8 @@ public class ServiceDownloadSound extends IntentService {
 				if(index != -1)
 				{
 					int end_index = temp.indexOf("'" + word + "');");
-					word_flag = temp.substring(index + 11, end_index - 3);
+					if(index + 14 < end_index)
+						word_flag = temp.substring(index + 11, end_index - 3);
 					break;
 				}
 			}
@@ -90,7 +91,6 @@ public class ServiceDownloadSound extends IntentService {
 		NotificationManager manager = 
 				(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 		manager.notify(0, builder.build());
-	
 	}
 	
 }

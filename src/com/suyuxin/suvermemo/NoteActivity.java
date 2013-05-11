@@ -1,5 +1,6 @@
 package com.suyuxin.suvermemo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
@@ -14,7 +15,10 @@ import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +55,7 @@ public class NoteActivity extends FragmentActivity {
 	protected RatingBar rating_bar;
 	protected int count_total_note;//total number of notes in this notebook
 	protected int count_total_today_note;
+	protected File sound_root_path;
 	
 	protected OnClickListener listener_next_note = new OnClickListener()
 	{
@@ -99,6 +104,11 @@ public class NoteActivity extends FragmentActivity {
 		//create read date
 		database = new NoteDbAdapter(this);
 		updateNoteList();
+		//
+		sound_root_path = new File(Environment.getExternalStorageDirectory(), 
+					DataActivity.EXTERNAL_ROOT_PATH);
+		if(!sound_root_path.exists())
+			sound_root_path.mkdirs();
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
 	
@@ -206,6 +216,7 @@ public class NoteActivity extends FragmentActivity {
 			{
 				args.putString(DummySectionFragment.ARG_SECTION_TYPE,
 						DummySectionFragment.ARG_SECTION_HEAD);
+				args.putString(DummySectionFragment.ARG_TITLE, title);
 			}else if(position == getCount() - 1)
 			{
 				args.putString(DummySectionFragment.ARG_SECTION_TYPE,
@@ -252,7 +263,9 @@ public class NoteActivity extends FragmentActivity {
 		public static final String ARG_SECTION_HEAD = "section_head";
 		public static final String ARG_SECTION_NORMAL = "section_normal";
 		public static final String ARG_SECTION_TAIL = "section_tail";
-
+		public static final String ARG_TITLE = "title";
+		private String word;//used in play sound
+		private MediaPlayer player;
 		public DummySectionFragment() {
 		}
 
@@ -282,9 +295,37 @@ public class NoteActivity extends FragmentActivity {
 				return rootView;
 			}
 			else
-			{
+			{//head
 				View rootView = inflater.inflate(R.layout.fragment_note_head, container, false);
-				
+				Button play = (Button)rootView.findViewById(R.id.button_play_sound);
+				play.setVisibility(Button.INVISIBLE);
+				//test whether to add pronunciation
+				word = getArguments().getString(ARG_TITLE);
+				if(!word.matches("[a-zA-Z]*"))
+					return rootView;//not a word
+				if(!new File(sound_root_path, word + ".wav").exists())
+					return rootView;//pronunciation file does not exist
+				//add pronunciation
+				play.setVisibility(Button.VISIBLE);
+				play.setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						File file = new File(sound_root_path, word + ".wav");
+						player = MediaPlayer.create(getBaseContext(), Uri.fromFile(file));
+						player.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
+						{
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								// TODO Auto-generated method stub
+								mp.release();
+							}
+							
+						});
+						player.start();
+					}
+				});
 				return rootView;
 			}
 		}
