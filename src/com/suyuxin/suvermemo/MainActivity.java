@@ -1,11 +1,10 @@
 package com.suyuxin.suvermemo;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.notestore.NoteFilter;
@@ -19,13 +18,10 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -37,6 +33,18 @@ public class MainActivity extends DataActivity{
 	
 	private ListView view_notebook_list;
 	private boolean in_sync = false;
+	
+	private void BeginDownloadSound()
+	{
+		Iterator<String> iter = getWordsToDownloadSound().iterator();
+		while(iter.hasNext())
+		{
+			Intent intent = new Intent(this, ServiceDownloadSound.class);
+			intent.putExtra("word", iter.next());
+			startService(intent);
+			break;
+		}
+	}
 	private class NotebookListAdapter extends ArrayAdapter<String> {
 
 		public NotebookListAdapter(Context context, int resource,
@@ -71,9 +79,13 @@ public class MainActivity extends DataActivity{
 					{
 						if(!evernote_session.isLoggedIn())
 						{
-							evernote_session.authenticate(getContext());
+							evernote_session.authenticate(getBaseContext());
 						}
 						new UpdateNotebookList().execute();
+					}
+					else if(getItem(position).equals(getResources().getString(R.string.text_sync_sound_file)))
+					{//download pronunciation file
+						BeginDownloadSound();
 					}
 					else
 					{//normally update content of a notebook
@@ -82,6 +94,9 @@ public class MainActivity extends DataActivity{
 					}
 				}
 			});
+			if(position >= list_notebook_guid.length)
+				return convertView;
+			
 			Button enter = (Button)convertView.findViewById(R.id.button_notebook_enter);
 			enter.setVisibility(Button.INVISIBLE);
 			enter.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +281,8 @@ public class MainActivity extends DataActivity{
 		protected void onPostExecute(Void names) {
 			// TODO Auto-generated method stub
 			super.onPostExecute(names);
+			notebook_info = database.getNotebookList();
+			database.close();
 			ListView view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
 			NotebookListAdapter adapter = new NotebookListAdapter(getBaseContext(),
 					R.layout.notebook_row,
@@ -313,6 +330,7 @@ public class MainActivity extends DataActivity{
 						{//need to update
 							database.updateNotebook(notebook.getName(), guid, cloud_counts.get(guid));
 						}
+						
 					}
 					else
 					{//store new notebook into database
@@ -327,12 +345,12 @@ public class MainActivity extends DataActivity{
 				// TODO Auto-generated catch block
 				Log.e(LogTag, e.toString(), e);
 			}finally{
-				database.close();
 				return null;
 			}
 		}
 		
 	}
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

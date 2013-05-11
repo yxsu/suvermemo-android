@@ -147,6 +147,14 @@ public class NoteDbAdapter{
 		return db.update(TABLE_NAME_NOTEBOOK, values, COL_NOTEBOOK_GUID + "='" + guid+"'", null) > 0;
 	}
 	
+	public boolean deleteNotebook(String guid)
+	{
+		//delete notes
+		db.delete(TABLE_NAME_NOTE, COL_NOTEBOOK_GUID + " = '" +guid +"'", null);
+		//delete notebooks
+		return db.delete(TABLE_NAME_NOTEBOOK, COL_NOTEBOOK_GUID + " = '" +guid +"'", null) > 0;
+	}
+	
 	public Map<String, NotebookInfo> getNotebookList()
 	{
 		Cursor cursor = db.query(TABLE_NAME_NOTEBOOK, new String[]{COL_NOTEBOOK_GUID, COL_NOTEBOOK_NAME, COL_NOTE_NUMBER},
@@ -183,9 +191,24 @@ public class NoteDbAdapter{
 		values.put(COL_TITLE, note.getTitle());
 		values.put(COL_CONTENT, note.getContent());
 		values.put(COL_UPDATE_TIME, note.getUpdated());
+		values.put(COL_NOTEBOOK_GUID, note.getNotebookGuid());
 		return db.update(TABLE_NAME_NOTE, values, COL_NOTE_GUID + "='" + note.getGuid() +"'", null) > 0;
 	}
 	
+	public boolean deleteNote(String note_guid, String notebook_guid)
+	{
+		if(db.delete(TABLE_NAME_NOTE, COL_NOTE_GUID + "='" + note_guid +"'", null) > 0)
+		{
+			//get note number in notebook table
+			Cursor cursor = db.query(TABLE_NAME_NOTEBOOK, new String[]{COL_NOTEBOOK_NAME, COL_NOTE_NUMBER},
+					COL_NOTEBOOK_GUID + "= '" + notebook_guid + "'", null, null, null, null);
+			if(cursor.moveToFirst())
+			{
+				return updateNotebook(cursor.getString(0), notebook_guid, cursor.getInt(1) - 1);
+			}
+		}
+		return false;
+	}
 	public boolean updateNoteShowTime(String note_guid, long show_time, int familiar_index)
 	{
 		ContentValues values = new ContentValues();
@@ -206,6 +229,25 @@ public class NoteDbAdapter{
 			}while(cursor.moveToNext());
 		}
 		return guid_notebook;
+	}
+	
+	public String[] getTitleOfAllNotes()
+	{
+		Cursor cursor = db.query(TABLE_NAME_NOTE, new String[]{COL_TITLE}, null, null, null, null, null);
+		//copy
+		if(cursor.moveToFirst())
+		{
+			String[] titles = new String[cursor.getCount()];
+			int index = 0;
+			do
+			{
+				titles[index] = cursor.getString(0);
+				index++;
+			}while(cursor.moveToNext());
+			return titles;
+		}
+		else
+			return null;
 	}
 	
 	public Map<String, NoteInfo> getNote(String notebook_guid)

@@ -96,6 +96,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int text_notebook_enter=0x7f060017;
         public static final int text_notebook_in_sync=0x7f060006;
         public static final int text_notebook_sync=0x7f060005;
+        public static final int text_sync_sound_file=0x7f06001d;
         public static final int text_wait_for_download=0x7f06001c;
         public static final int titile_evaluation_statistics=0x7f06001a;
         public static final int title_activity_data=0x7f060007;

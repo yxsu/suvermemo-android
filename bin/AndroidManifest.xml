@@ -9,6 +9,9 @@
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="16" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -36,6 +39,12 @@
             android:name="com.suyuxin.suvermemo.NoteActivity"
             android:label="@string/title_activity_note" >
         </activity>
+
+        <service
+            android:name="com.suyuxin.suvermemo.ServiceDownloadSound"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

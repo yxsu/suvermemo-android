@@ -30,5 +30,6 @@
     <string name="titile_evaluation_statistics">Evaluation and Statistics</string>
     <string name="text_need_sync_again">Notes have not been downloaded completely! Please press Sync again.</string>
     <string name="text_wait_for_download">Please wait for downloading patiently!</string>
+    <string name="text_sync_sound_file">Download pronunciation files</string>
 
 </resources>
