@@ -59,9 +59,10 @@ public class ServiceDownloadSound extends IntentService {
 				int index = temp.indexOf("return au(");
 				if(index != -1)
 				{
-					int end_index = temp.indexOf("'" + word + "');");
-					if(index + 14 < end_index)
-						word_flag = temp.substring(index + 11, end_index - 3);
+					temp = temp.substring(index);
+					String[] split = temp.split(" ");
+					if(split != null && split.length > 2)
+						word_flag = split[1].substring(4, split[1].length() - 2);
 					break;
 				}
 			}
