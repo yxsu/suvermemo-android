@@ -40,6 +40,7 @@ public class ServiceDownloadSound extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		// TODO Auto-generated method stub
 		String word = intent.getStringExtra("word");
+		int notification_id = intent.getIntExtra("id", 0);
 		String word_flag = "";
 		//prepare for notification bar
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
@@ -83,6 +84,7 @@ public class ServiceDownloadSound extends IntentService {
 				output.close();
 				input.close();
 				builder.setContentTitle("Sound Ready!");
+				notification_id = 0;
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -90,7 +92,7 @@ public class ServiceDownloadSound extends IntentService {
 		}
 		NotificationManager manager = 
 				(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-		manager.notify(0, builder.build());
+		manager.notify(notification_id, builder.build());
 	}
 	
 }

@@ -37,11 +37,14 @@ public class MainActivity extends DataActivity{
 	private void BeginDownloadSound()
 	{
 		Iterator<String> iter = getWordsToDownloadSound().iterator();
+		int notification_id = 0;
 		while(iter.hasNext())
 		{
 			Intent intent = new Intent(this, ServiceDownloadSound.class);
 			intent.putExtra("word", iter.next());
+			intent.putExtra("id", notification_id);
 			startService(intent);
+			notification_id++;
 		}
 	}
 	private class NotebookListAdapter extends ArrayAdapter<String> {
