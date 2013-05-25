@@ -32,15 +32,14 @@ import android.app.DownloadManager;
 @SuppressLint("ValidFragment")
 public class DataActivity extends Activity {
 
-	//basic information about application
-	public static final String EXTERNAL_ROOT_PATH = "suvermemo";
-	private static final String CONSUMER_KEY = "suyuxin-9809";
-	private static final String CONSUMER_SECRET = "f2541e0d8ea719ff";
-	private static final EvernoteSession.EvernoteService EVERNOTE_SERVICE
-	  	= EvernoteSession.EvernoteService.PRODUCTION;
-		
-	protected EvernoteSession evernote_session;
-	
+    public static final String EXTERNAL_ROOT_PATH = "suvermemo";
+    private static final String CONSUMER_KEY = "suyuxin-9809";
+    private static final String CONSUMER_SECRET = "f2541e0d8ea719ff";
+    private static final EvernoteSession.EvernoteService EVERNOTE_SERVICE
+            = EvernoteSession.EvernoteService.PRODUCTION;
+
+    public static EvernoteSession evernote_session;
+
 	protected NoteDbAdapter database;
 	protected Map<String, NotebookInfo> notebook_info;// notebook_guid -> NotebookInfo
 	protected String[] list_notebook_guid;//used for ListView

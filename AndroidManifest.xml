@@ -45,6 +45,9 @@
             android:enabled="true"
             android:exported="true" >
         </service>
+        <service android:name=".ServiceDownloadNote"/>
+        <service android:name=".ServiceUpdateNotebookList"/>
+        <service android:name=".ServiceDownload"/>
     </application>
 
 </manifest>

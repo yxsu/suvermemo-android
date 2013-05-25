@@ -8,13 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <ProgressBar
-        android:id="@+id/progressBar_sync"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true" />
-
     <ListView
         android:id="@+id/listView_notebook"
         android:layout_width="fill_parent"

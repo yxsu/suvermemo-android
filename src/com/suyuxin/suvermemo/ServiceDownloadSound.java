@@ -23,7 +23,7 @@ public class ServiceDownloadSound extends IntentService {
 
 	private static final String WEBSTER_SOUND_HOST = "http://media.merriam-webster.com/soundc11/";
 	private static final String WEBSTER_HOST = "http://www.merriam-webster.com/dictionary/";
-	private static final String ROOT_PATH = DataActivity.EXTERNAL_ROOT_PATH;
+	protected static final String ROOT_PATH = DataActivity.EXTERNAL_ROOT_PATH;
 	File root_path;
 	public ServiceDownloadSound() {
 		super("Name");
