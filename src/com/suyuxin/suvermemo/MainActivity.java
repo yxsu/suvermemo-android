@@ -95,7 +95,7 @@ public class MainActivity extends DataActivity{
 						{
 							evernote_session.authenticate(getBaseContext());
 						}
-                        UpdateNotebookList();
+                       // UpdateNotebookList();
 					}
 					else if(getItem(position).equals(getResources().getString(R.string.text_sync_sound_file)))
 					{//download pronunciation file
