@@ -2,7 +2,9 @@
 <project version="4">
   <component name="AndroidLayoutPreviewToolWindow">
     <option name="state">
-      <GlobalState />
+      <GlobalState>
+        <option name="visible" value="false" />
+      </GlobalState>
     </option>
   </component>
   <component name="AndroidLayouts">
@@ -34,6 +36,7 @@
     <file path="$PROJECT_DIR$/gen/com/suyuxin/suvermemo/BuildConfig.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1369651550146" ignored="false" />
     <file path="/Activity_task_panel.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1369656446690" ignored="false" />
     <file path="$PROJECT_DIR$/res/values/strings.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1369656256542" ignored="false" />
+    <file path="/NoteDbAdapter.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1369662436014" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -107,23 +110,32 @@
       <file leaf-file-name="TaskPanel.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="0" selection-start="271" selection-end="271" vertical-scroll-proportion="0.0">
+            <state line="14" column="1" selection-start="279" selection-end="279" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Activity_task_panel.xml" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/res/layout/Activity_task_panel.xml">
+      <file leaf-file-name="NoteDbAdapter.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/NoteDbAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="71" column="55" selection-start="3667" selection-end="3667" vertical-scroll-proportion="0.5193929">
+            <state line="354" column="69" selection-start="11635" selection-end="11635" vertical-scroll-proportion="0.5727848">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Activity_task_panel.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/layout/Activity_task_panel.xml">
+          <provider editor-type-id="text-editor">
+            <state line="87" column="0" selection-start="4799" selection-end="4799" vertical-scroll-proportion="-17.72">
               <folding>
                 <element signature="e#619#643#0" expanded="true" />
-                <element signature="e#1042#1068#0" expanded="true" />
+                <element signature="e#1095#1121#0" expanded="true" />
               </folding>
             </state>
           </provider>
-          <provider editor-type-id="android-designer">
+          <provider selected="true" editor-type-id="android-designer">
             <state />
           </provider>
         </entry>
@@ -173,6 +185,7 @@
         <option value="$PROJECT_DIR$/src/TaskPanel.java" />
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskPanel.java" />
         <option value="$PROJECT_DIR$/res/layout/Activity_task_panel.xml" />
+        <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/NoteDbAdapter.java" />
       </list>
     </option>
   </component>
@@ -402,7 +415,7 @@
       <workItem from="1369471568528" duration="123000" />
       <workItem from="1369471848233" duration="42000" />
       <workItem from="1369471930853" duration="1079000" />
-      <workItem from="1369649091571" duration="7364000" />
+      <workItem from="1369649091571" duration="12794000" />
     </task>
     <task id="LOCAL-00001" summary="test Android Studio">
       <created>1368703235652</created>
@@ -412,7 +425,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19394000" />
+    <option name="totallyTimeSpent" value="24824000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1366" height="742" extended-state="0" />
@@ -421,7 +434,7 @@
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.49925706" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279743" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32852808" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38102895" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37936267" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -431,7 +444,7 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279743" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.5007429" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25037935" sideWeight="0.57206535" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.323217" sideWeight="0.57206535" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.245827" sideWeight="0.61897105" order="0" side_tool="false" content_ui="combo" />
@@ -506,11 +519,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/evernote/client/conn/mobile/DiskBackedByteStore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="13" selection-start="1709" selection-end="1709" vertical-scroll-proportion="0.38741723" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/evernote/client/conn/mobile/FileData.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="40" column="3" selection-start="1822" selection-end="1822" vertical-scroll-proportion="0.24834438" />
@@ -581,6 +589,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/Activity_task_panel.xml">
+      <provider editor-type-id="text-editor">
+        <state line="87" column="0" selection-start="4799" selection-end="4799" vertical-scroll-proportion="-17.72">
+          <folding>
+            <element signature="e#619#643#0" expanded="true" />
+            <element signature="e#1095#1121#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/DataActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="47" column="36" selection-start="1568" selection-end="1568" vertical-scroll-proportion="0.0">
@@ -590,22 +611,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="0" selection-start="271" selection-end="271" vertical-scroll-proportion="0.0">
+        <state line="14" column="1" selection-start="279" selection-end="279" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/Activity_task_panel.xml">
+    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/NoteDbAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="71" column="55" selection-start="3667" selection-end="3667" vertical-scroll-proportion="0.5193929">
-          <folding>
-            <element signature="e#619#643#0" expanded="true" />
-            <element signature="e#1042#1068#0" expanded="true" />
-          </folding>
+        <state line="354" column="69" selection-start="11635" selection-end="11635" vertical-scroll-proportion="0.5727848">
+          <folding />
         </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
   </component>

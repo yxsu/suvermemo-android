@@ -25,7 +25,7 @@ import android.util.Pair;
 public class NoteDbAdapter{
 
 	private static final String DB_NAME = "noteDb";
-	private static final int DB_VERSION = 1;
+	private static final int DB_VERSION = 2;
 	private final Context context;
 	private SQLiteDatabase db;
 	private NoteDbHelper db_helper;
@@ -73,6 +73,10 @@ public class NoteDbAdapter{
 	public static final String COL_UPDATE_TIME = "update_time";
 	public static final String COL_SHOW_TIME = "show_time";
 	public static final String COL_FAMILIAR_INDEX = "familiar_index";
+    public static final String TABLE_NAME_TASK = "task";
+    public static final String COL_IMPORTANT = "important";
+    public static final String COL_URGENT = "urgent";
+    public static final String COL_DAILY = "daily";
 	//SQL statements
 	private static final String STRING_CREATE_NOTEBOOK = "CREATE TABLE " 
 			+ TABLE_NAME_NOTEBOOK + " ( " + COL_NOTEBOOK_GUID + " TEXT PRIMARY KEY, "
@@ -87,6 +91,11 @@ public class NoteDbAdapter{
 			+ COL_UPDATE_TIME + " DECIMAL(14,0), "
 			+ COL_SHOW_TIME + " DECIMAL(14,0), "
 			+ COL_FAMILIAR_INDEX + " INTEGER);";
+    private static final String STRING_CREATE_TASK = "CREATE TABLE " + TABLE_NAME_TASK
+            + " ( " + COL_NOTE_GUID + " TEXT PRIMARY KEY, "
+            + COL_IMPORTANT + " TEXT, "
+            + COL_URGENT + " TEXT, "
+            + COL_DAILY + " TEXT);";
 	
 	public NoteDbAdapter(Context ctx)
 	{
@@ -109,10 +118,12 @@ public class NoteDbAdapter{
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
-			
-
+			if(oldVersion == 1 && newVersion == 2)
+            {//create table of task
+                db.execSQL(STRING_CREATE_TASK);
+            }
 		}
 
 	}
@@ -154,7 +165,31 @@ public class NoteDbAdapter{
 		//delete notebooks
 		return db.delete(TABLE_NAME_NOTEBOOK, COL_NOTEBOOK_GUID + " = '" +guid +"'", null) > 0;
 	}
-	
+
+    public long insertTask(String guid, boolean is_important, boolean is_urgent, boolean is_daily)
+    {
+        ContentValues values = new ContentValues();
+        values.put(COL_NOTE_GUID, guid);
+        values.put(COL_IMPORTANT, is_important ? "yes" : "no");
+        values.put(COL_URGENT, is_urgent ? "yes" : "no");
+        values.put(COL_DAILY, is_daily ? "yes" : "no");
+        return db.insert(TABLE_NAME_TASK, null, values);
+    }
+
+    public boolean updateTask(String guid, boolean is_important, boolean is_urgent, boolean is_daily)
+    {
+        ContentValues values = new ContentValues();
+        values.put(COL_IMPORTANT, is_important ? "yes" : "no");
+        values.put(COL_URGENT, is_urgent ? "yes" : "no");
+        values.put(COL_DAILY, is_daily ? "yes" : "no");
+        return db.update(TABLE_NAME_TASK, values, COL_NOTE_GUID + " = '" + guid + "'", null) > 0;
+    }
+
+    public boolean deleteTask(String guid)
+    {
+        return db.delete(TABLE_NAME_TASK, COL_NOTE_GUID + " = '" + guid + "'", null) > 0;
+    }
+
 	public Map<String, NotebookInfo> getNotebookList()
 	{
 		Cursor cursor = db.query(TABLE_NAME_NOTEBOOK, new String[]{COL_NOTEBOOK_GUID, COL_NOTEBOOK_NAME, COL_NOTE_NUMBER},
@@ -289,5 +324,49 @@ public class NoteDbAdapter{
 		}
 		return ordered_list;
 	}
-	
+
+    public String[] getNormalTask(boolean is_important, boolean is_urgent)
+    {
+        //query
+        Cursor cursor = db.query(TABLE_NAME_TASK,
+                new String[]{COL_NOTE_GUID}, COL_IMPORTANT + " = " + (is_important ? "'yes'" : "'no'")
+                                             + " and " + COL_URGENT + " = " +(is_urgent ? "'yes'" : "'no'"),
+                null, null, null, null);
+        //copy
+        if(cursor.moveToFirst())
+        {
+            String[] guid = new String[cursor.getCount()];
+            int index = 0;
+            do
+            {
+                guid[index] = cursor.getString(0);
+                index++;
+            }while(cursor.moveToNext());
+            return guid;
+        }
+        else
+            return null;
+    }
+
+    public String[] getDailyTask()
+    {
+        //query
+        Cursor cursor = db.query(TABLE_NAME_TASK,
+                new String[]{COL_NOTE_GUID}, COL_DAILY + " = 'yes'", null, null, null, null);
+        //copy
+        if(cursor.moveToFirst())
+        {
+            String[] guid = new String[cursor.getCount()];
+            int index = 0;
+            do
+            {
+                guid[index] = cursor.getString(0);
+                index++;
+            }while(cursor.moveToNext());
+            return guid;
+        }
+        else
+            return null;
+    }
 }
+
