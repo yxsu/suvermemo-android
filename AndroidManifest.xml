@@ -39,6 +39,7 @@
             android:name="com.suyuxin.suvermemo.NoteActivity"
             android:label="@string/title_activity_note" >
         </activity>
+        <activity android:name=".TaskPanel"/>
 
         <service
             android:name="com.suyuxin.suvermemo.ServiceDownloadSound"

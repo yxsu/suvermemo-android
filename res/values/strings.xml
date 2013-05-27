@@ -31,5 +31,10 @@
     <string name="text_need_sync_again">Notes have not been downloaded completely! Please press Sync again.</string>
     <string name="text_wait_for_download">Please wait for downloading patiently!</string>
     <string name="text_sync_sound_file">Download pronunciation files</string>
+    <string name="text_urgent">急</string>
+    <string name="text_important">重</string>
+    <string name="text_unimportant">轻</string>
+    <string name="text_not_urgent">缓</string>
+    <string name="text_daily">恒</string>
 
 </resources>

@@ -33,6 +33,7 @@ public class MainActivity extends DataActivity{
 	
 	private ListView view_notebook_list;
 	private boolean in_sync = false;
+    private static final String TASK_NOTEBOOK_NAME = "任务列表";
 	
 	private void BeginDownloadSound()
 	{
@@ -55,10 +56,21 @@ public class MainActivity extends DataActivity{
         startService(intent);
     }
 
+    private void BeginTaskNavigation()
+    {
+
+    }
+
+    private void BeginDownloadTask()
+    {
+
+    }
+
     private void UpdateNotebookList()
     {
 
     }
+
 	private class NotebookListAdapter extends ArrayAdapter<String> {
 
 		public NotebookListAdapter(Context context, int resource,
@@ -97,6 +109,10 @@ public class MainActivity extends DataActivity{
 						}
                        // UpdateNotebookList();
 					}
+                    else if(getItem(position).equals(TASK_NOTEBOOK_NAME))
+                    {
+                        BeginDownloadTask();
+                    }
 					else if(getItem(position).equals(getResources().getString(R.string.text_sync_sound_file)))
 					{//download pronunciation file
 						BeginDownloadSound();
@@ -125,11 +141,18 @@ public class MainActivity extends DataActivity{
 						Toast.makeText(getBaseContext(), R.string.text_wait_for_download, Toast.LENGTH_LONG).show();
 						return;
 					}
-					Intent intent = new Intent(getContext(), NoteActivity.class);
-					intent.putExtra("notebook_guid", list_notebook_guid[position]);
-					intent.putExtra("notebook_count", 
-						notebook_info.get(list_notebook_guid[position]).note_number);
-					startActivity(intent);
+                    if(getItem(position).equals(TASK_NOTEBOOK_NAME))
+                    {
+                        BeginTaskNavigation();
+                    }
+                    else
+                    {
+					    Intent intent = new Intent(getContext(), NoteActivity.class);
+					    intent.putExtra("notebook_guid", list_notebook_guid[position]);
+					    intent.putExtra("notebook_count",
+						    notebook_info.get(list_notebook_guid[position]).note_number);
+					    startActivity(intent);
+                    }
 				}
 			});
 			//test whether to show "enter" button
