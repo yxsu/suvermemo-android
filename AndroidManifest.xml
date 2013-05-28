@@ -49,6 +49,7 @@
         <service android:name=".ServiceDownloadNote"/>
         <service android:name=".ServiceUpdateNotebookList"/>
         <service android:name=".ServiceDownload"/>
+        <service android:name=".ServiceDownloadTask"/>
     </application>
 
 </manifest>

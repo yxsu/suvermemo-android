@@ -58,12 +58,14 @@ public class MainActivity extends DataActivity{
 
     private void BeginTaskNavigation()
     {
-
+        startActivity(new Intent(this, TaskPanel.class));
     }
 
-    private void BeginDownloadTask()
+    private void BeginDownloadTask(String notebook_guid)
     {
-
+        Intent intent = new Intent(this, ServiceDownloadTask.class);
+        intent.putExtra("notebook_guid", notebook_guid);
+        startService(intent);
     }
 
     private void UpdateNotebookList()
@@ -109,9 +111,9 @@ public class MainActivity extends DataActivity{
 						}
                        // UpdateNotebookList();
 					}
-                    else if(getItem(position).equals(TASK_NOTEBOOK_NAME))
+                    else if(getItem(position).startsWith(TASK_NOTEBOOK_NAME))
                     {
-                        BeginDownloadTask();
+                        BeginDownloadTask(list_notebook_guid[position]);
                     }
 					else if(getItem(position).equals(getResources().getString(R.string.text_sync_sound_file)))
 					{//download pronunciation file
@@ -141,7 +143,7 @@ public class MainActivity extends DataActivity{
 						Toast.makeText(getBaseContext(), R.string.text_wait_for_download, Toast.LENGTH_LONG).show();
 						return;
 					}
-                    if(getItem(position).equals(TASK_NOTEBOOK_NAME))
+                    if(getItem(position).startsWith(TASK_NOTEBOOK_NAME))
                     {
                         BeginTaskNavigation();
                     }

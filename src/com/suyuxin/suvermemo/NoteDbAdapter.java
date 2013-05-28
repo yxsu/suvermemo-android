@@ -30,6 +30,19 @@ public class NoteDbAdapter{
 	private SQLiteDatabase db;
 	private NoteDbHelper db_helper;
 	//custom data structure
+    public static class TaskInfo
+    {
+        public String guid;
+        public String title;
+        public String content;
+        public boolean is_important;
+        public boolean is_urgent;
+        public boolean is_daily = false;
+        public long update_time;
+
+        public TaskInfo(){
+        }
+    }
 	public class NotebookInfo
 	{
 		String name;
@@ -168,6 +181,7 @@ public class NoteDbAdapter{
 
     public long insertTask(String guid, boolean is_important, boolean is_urgent, boolean is_daily)
     {
+        //insert in task table
         ContentValues values = new ContentValues();
         values.put(COL_NOTE_GUID, guid);
         values.put(COL_IMPORTANT, is_important ? "yes" : "no");
@@ -188,6 +202,42 @@ public class NoteDbAdapter{
     public boolean deleteTask(String guid)
     {
         return db.delete(TABLE_NAME_TASK, COL_NOTE_GUID + " = '" + guid + "'", null) > 0;
+    }
+
+    public Map<String, TaskInfo> getLocalTasks(String task_notebook_guid)
+    {
+        //get information about important, urgent and daily
+        Cursor cursor = db.query(TABLE_NAME_TASK, new String[]{COL_NOTE_GUID, COL_IMPORTANT, COL_URGENT, COL_DAILY},
+                null, null, null, null, null);
+        Map<String, TaskInfo> map = new HashMap<String, TaskInfo>();
+        if(cursor.moveToFirst())
+        {
+            do
+            {
+                TaskInfo task = new TaskInfo();
+                task.is_important = cursor.getString(1).equals("yes");
+                task.is_urgent = cursor.getString(2).equals("yes");
+                task.is_daily = cursor.getString(3).equals("yes");
+                map.put(cursor.getString(0), task);
+            }while(cursor.moveToNext());
+        }
+        //get title, content and update_time
+        cursor = db.query(TABLE_NAME_NOTE, new String[]{COL_NOTE_GUID, COL_TITLE, COL_CONTENT, COL_UPDATE_TIME},
+                COL_NOTEBOOK_GUID + "= '" + task_notebook_guid + "'", null, null, null, null);
+        if(cursor.moveToFirst())
+        {
+            do
+            {
+                String guid = cursor.getString(0);
+                if(map.containsKey(guid))
+                {
+                    map.get(guid).title = cursor.getString(1);
+                    map.get(guid).content = cursor.getString(2);
+                    map.get(guid).update_time = cursor.getLong(3);
+                }
+            }while(cursor.moveToNext());
+        }
+        return map;
     }
 
 	public Map<String, NotebookInfo> getNotebookList()

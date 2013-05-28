@@ -28,9 +28,7 @@ public class ServiceUpdateNotebookList extends ServiceDownload {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        String auth_token = DataActivity.evernote_session.getAuthToken();
         try {
-            NoteStore.Client client = DataActivity.evernote_session.getClientFactory().createNoteStoreClient().getClient();
             List<Notebook> cloud_notebooks = client.listNotebooks(auth_token);
             //get count of notes in each notebook
             Map<String, Integer> cloud_counts = client.findNoteCounts(auth_token, new NoteFilter(), false)

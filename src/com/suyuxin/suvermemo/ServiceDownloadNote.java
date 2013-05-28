@@ -1,10 +1,7 @@
 package com.suyuxin.suvermemo;
 
-import android.app.IntentService;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
@@ -12,6 +9,7 @@ import com.evernote.edam.notestore.NoteStore;
 import com.evernote.edam.type.Note;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,10 +28,8 @@ public class ServiceDownloadNote extends ServiceDownload {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        String auth_token = DataActivity.evernote_session.getAuthToken();
         String notebook_guid = intent.getStringExtra("notebook_guid");
         try {
-            NoteStore.Client client = DataActivity.evernote_session.getClientFactory().createNoteStoreClient().getClient();
             //set notebook filter
             NoteFilter filter = new NoteFilter();
             filter.setNotebookGuid(notebook_guid);
@@ -66,6 +62,8 @@ public class ServiceDownloadNote extends ServiceDownload {
                         //
                         updateProgress(LogTag, "Update note : " + note.getTitle(), 0);
                     }
+                    //remove record
+                    local_notes.remove(note.getGuid());
                 }
                 else
                 {//download new content
@@ -75,6 +73,12 @@ public class ServiceDownloadNote extends ServiceDownload {
                     //
                     updateProgress(LogTag, "Download note : " + note.getTitle(), 0);
                 }
+            }
+            //remove all deleted notes
+            Iterator<String> iter_guid = local_notes.keySet().iterator();
+            while(iter_guid.hasNext())
+            {
+                database.deleteNote(iter_guid.next(), notebook_guid);
             }
             updateProgress(LogTag, "finished", 0);
 

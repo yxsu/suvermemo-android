@@ -10,6 +10,6 @@ public class TaskPanel extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_task_panel);
     }
 }
