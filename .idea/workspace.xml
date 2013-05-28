@@ -51,7 +51,38 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
+      <breakpoint url="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadTask.java" line="114" class="com.suyuxin.suvermemo.ServiceDownloadTask" package="com.suyuxin.suvermemo">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+      <breakpoint url="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadTask.java" line="121" class="com.suyuxin.suvermemo.ServiceDownloadTask" package="com.suyuxin.suvermemo">
+        <option name="ENABLED" value="true" />
+        <option name="LOG_ENABLED" value="false" />
+        <option name="LOG_EXPRESSION_ENABLED" value="false" />
+        <option name="REMOVE_AFTER_HIT" value="false" />
+        <option name="SUSPEND_POLICY" value="SuspendAll" />
+        <option name="SUSPEND" value="true" />
+        <option name="COUNT_FILTER_ENABLED" value="false" />
+        <option name="COUNT_FILTER" value="0" />
+        <option name="CONDITION_ENABLED" value="true" />
+        <option name="CLASS_FILTERS_ENABLED" value="false" />
+        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
+        <option name="CONDITION" value="" />
+        <option name="LOG_MESSAGE" value="" />
+      </breakpoint>
+    </line_breakpoints>
     <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
@@ -107,10 +138,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TaskPanel.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="TaskPanel.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskPanel.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="115" column="24" selection-start="4708" selection-end="4708" vertical-scroll-proportion="0.75884247">
+            <state line="115" column="24" selection-start="4708" selection-end="4708" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#3756#3764#0" expanded="true" />
                 <element signature="e#4339#4347#0" expanded="true" />
@@ -131,10 +162,22 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="activity_task_panel.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/res/layout/activity_task_panel.xml">
+          <provider editor-type-id="text-editor">
+            <state line="87" column="0" selection-start="4830" selection-end="4830" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+          <provider selected="true" editor-type-id="android-designer">
+            <state />
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ServiceDownloadTask.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="23" column="56" selection-start="795" selection-end="795" vertical-scroll-proportion="0.0">
+            <state line="77" column="25" selection-start="2948" selection-end="2948" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#1842#1858#0" expanded="true" />
                 <element signature="e#2673#2679#0" expanded="true" />
@@ -186,8 +229,9 @@
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadNote.java" />
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadTask.java" />
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/MainActivity.java" />
-        <option value="$PROJECT_DIR$/res/layout/task_row.xml" />
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskPanel.java" />
+        <option value="$PROJECT_DIR$/res/layout/task_row.xml" />
+        <option value="$PROJECT_DIR$/res/layout/activity_task_panel.xml" />
       </list>
     </option>
   </component>
@@ -396,7 +440,7 @@
       <workItem from="1369471848233" duration="42000" />
       <workItem from="1369471930853" duration="1079000" />
       <workItem from="1369649091571" duration="13020000" />
-      <workItem from="1369707454139" duration="22750000" />
+      <workItem from="1369707454139" duration="23461000" />
     </task>
     <task id="LOCAL-00001" summary="test Android Studio">
       <created>1368703235652</created>
@@ -406,14 +450,14 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47800000" />
+    <option name="totallyTimeSpent" value="48511000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1366" height="742" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.41076922" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.67230767" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32852808" sideWeight="0.41076922" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32852808" sideWeight="0.62" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279743" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -425,11 +469,11 @@
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3276923" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32852808" sideWeight="0.5007429" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.323217" sideWeight="0.47846153" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.323217" sideWeight="0.29692307" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32954547" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.245827" sideWeight="0.61897105" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.323217" sideWeight="0.52" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32852808" sideWeight="0.5892308" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -530,16 +574,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/activity_task_panel.xml">
-      <provider editor-type-id="text-editor">
-        <state line="87" column="0" selection-start="4799" selection-end="4799" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceUpdateNotebookList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="7" selection-start="833" selection-end="833" vertical-scroll-proportion="0.2652733">
@@ -561,16 +595,6 @@
             <element signature="imports" expanded="true" />
           </folding>
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/res/layout/task_row.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="43" selection-start="535" selection-end="535" vertical-scroll-proportion="0.31578946">
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/notebook_row.xml">
@@ -602,16 +626,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="23" column="56" selection-start="795" selection-end="795" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#1842#1858#0" expanded="true" />
-            <element signature="e#2673#2679#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="203" column="23" selection-start="6171" selection-end="6171" vertical-scroll-proportion="0.0">
@@ -624,12 +638,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskPanel.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="24" selection-start="4708" selection-end="4708" vertical-scroll-proportion="0.75884247">
+        <state line="115" column="24" selection-start="4708" selection-end="4708" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#3756#3764#0" expanded="true" />
             <element signature="e#4339#4347#0" expanded="true" />
           </folding>
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/task_row.xml">
+      <provider editor-type-id="text-editor">
+        <state line="12" column="57" selection-start="549" selection-end="549" vertical-scroll-proportion="-7.2">
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="77" column="25" selection-start="2948" selection-end="2948" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#1842#1858#0" expanded="true" />
+            <element signature="e#2673#2679#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/layout/activity_task_panel.xml">
+      <provider editor-type-id="text-editor">
+        <state line="87" column="0" selection-start="4830" selection-end="4830" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer">
+        <state />
       </provider>
     </entry>
   </component>

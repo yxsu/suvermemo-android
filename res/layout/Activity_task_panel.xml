@@ -71,9 +71,9 @@
                     android:background="@android:color/holo_blue_light"/>
         </TableRow>
         <TableRow
-                android:layout_weight="1.5"
+                android:layout_weight="1.8"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
+                android:layout_height="fill_parent" android:baselineAligned="true">
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
