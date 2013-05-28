@@ -56,9 +56,11 @@ public class MainActivity extends DataActivity{
         startService(intent);
     }
 
-    private void BeginTaskNavigation()
+    private void BeginTaskNavigation(String notebook_guid)
     {
-        startActivity(new Intent(this, TaskPanel.class));
+        Intent intent = new Intent(this, TaskPanel.class);
+        intent.putExtra("notebook_guid", notebook_guid);
+        startActivity(intent);
     }
 
     private void BeginDownloadTask(String notebook_guid)
@@ -145,7 +147,7 @@ public class MainActivity extends DataActivity{
 					}
                     if(getItem(position).startsWith(TASK_NOTEBOOK_NAME))
                     {
-                        BeginTaskNavigation();
+                        BeginTaskNavigation(list_notebook_guid[position]);
                     }
                     else
                     {
