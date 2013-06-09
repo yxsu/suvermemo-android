@@ -72,7 +72,8 @@ public class MainActivity extends DataActivity{
 
     private void UpdateNotebookList()
     {
-
+        Intent intent = new Intent(this, ServiceUpdateNotebookList.class);
+        startService(intent);
     }
 
 	private class NotebookListAdapter extends ArrayAdapter<String> {

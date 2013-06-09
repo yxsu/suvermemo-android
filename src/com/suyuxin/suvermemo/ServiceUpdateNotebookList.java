@@ -22,8 +22,8 @@ public class ServiceUpdateNotebookList extends ServiceDownload {
 
     private static final String LogTag = "Update Notebook List";
 
-    public ServiceUpdateNotebookList(String name) {
-        super(name);
+    public ServiceUpdateNotebookList() {
+        super("name");
     }
 
     @Override
