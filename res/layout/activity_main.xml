@@ -10,9 +10,8 @@
 
     <ListView
         android:id="@+id/listView_notebook"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/progressBar_sync"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp" >
     </ListView>

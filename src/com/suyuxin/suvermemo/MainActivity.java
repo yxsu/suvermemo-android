@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import android.view.*;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
@@ -19,9 +20,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -33,21 +31,6 @@ public class MainActivity extends DataActivity{
 	
 	private ListView view_notebook_list;
 	private boolean in_sync = false;
-    private static final String TASK_NOTEBOOK_NAME = "任务列表";
-	
-	private void BeginDownloadSound()
-	{
-		Iterator<String> iter = getWordsToDownloadSound().iterator();
-		int notification_id = 0;
-		while(iter.hasNext())
-		{
-			Intent intent = new Intent(this, ServiceDownloadSound.class);
-			intent.putExtra("word", iter.next());
-			intent.putExtra("id", notification_id);
-			startService(intent);
-			notification_id++;
-		}
-	}
 
     private void BeginDownloadNote(String notebook_guid)
     {
@@ -56,19 +39,6 @@ public class MainActivity extends DataActivity{
         startService(intent);
     }
 
-    private void BeginTaskNavigation(String notebook_guid)
-    {
-        Intent intent = new Intent(this, TaskPanel.class);
-        intent.putExtra("notebook_guid", notebook_guid);
-        startActivity(intent);
-    }
-
-    private void BeginDownloadTask(String notebook_guid)
-    {
-        Intent intent = new Intent(this, ServiceDownloadTask.class);
-        intent.putExtra("notebook_guid", notebook_guid);
-        startService(intent);
-    }
 
     private void UpdateNotebookList()
     {
@@ -112,15 +82,7 @@ public class MainActivity extends DataActivity{
 						{
 							evernote_session.authenticate(getBaseContext());
 						}
-                       // UpdateNotebookList();
-					}
-                    else if(getItem(position).startsWith(TASK_NOTEBOOK_NAME))
-                    {
-                        BeginDownloadTask(list_notebook_guid[position]);
-                    }
-					else if(getItem(position).equals(getResources().getString(R.string.text_sync_sound_file)))
-					{//download pronunciation file
-						BeginDownloadSound();
+                        UpdateNotebookList();
 					}
 					else
 					{//normally update content of a notebook
@@ -146,10 +108,6 @@ public class MainActivity extends DataActivity{
 						Toast.makeText(getBaseContext(), R.string.text_wait_for_download, Toast.LENGTH_LONG).show();
 						return;
 					}
-                    if(getItem(position).startsWith(TASK_NOTEBOOK_NAME))
-                    {
-                        BeginTaskNavigation(list_notebook_guid[position]);
-                    }
                     else
                     {
 					    Intent intent = new Intent(getContext(), NoteActivity.class);
@@ -200,6 +158,45 @@ public class MainActivity extends DataActivity{
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId())
+        {
+            case R.id.action_task:
+                //open task panel
+                if(task_notebook_guid != null)
+                {
+                    Intent intent = new Intent(this, TaskPanel.class);
+                    intent.putExtra("notebook_guid", task_notebook_guid);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(this, R.string.info_need_create_task_notebook, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.action_download_sound:
+                //download sound
+                Iterator<String> iter = getWordsToDownloadSound().iterator();
+                int notification_id = 0;
+                while(iter.hasNext())
+                {
+                    Intent intent = new Intent(this, ServiceDownloadSound.class);
+                    intent.putExtra("word", iter.next());
+                    intent.putExtra("id", notification_id);
+                    startService(intent);
+                    notification_id++;
+                }
+                break;
+            case R.id.action_update_task:
+                //update content of task
+                Intent intent = new Intent(this, ServiceDownloadTask.class);
+                intent.putExtra("notebook_guid", task_notebook_guid);
+                startService(intent);
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
@@ -217,7 +214,14 @@ public class MainActivity extends DataActivity{
 				getNotebookNames());
 		view_notebook_list.setAdapter(adapter);
 	}
-	@Override
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);

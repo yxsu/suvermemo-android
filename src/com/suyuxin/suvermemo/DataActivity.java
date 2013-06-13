@@ -44,6 +44,9 @@ public class DataActivity extends Activity {
 	protected Map<String, NotebookInfo> notebook_info;// notebook_guid -> NotebookInfo
 	protected String[] list_notebook_guid;//used for ListView
 	protected Set<String> notebooks_having_local_contents;
+
+    protected static final String TASK_NOTEBOOK_NAME = "任务列表";
+    protected String task_notebook_guid = null;
 	//common used data
 	private File external_root_path;
 	
@@ -81,6 +84,11 @@ public class DataActivity extends Activity {
 		while(iter_notebook.hasNext())
 		{
 			Entry<String, NotebookInfo> iter = iter_notebook.next();
+            //get guid of task notebook
+            if(iter.getValue().name.equals(TASK_NOTEBOOK_NAME))
+            {
+                task_notebook_guid = iter.getKey();
+            }
 			names[index] = iter.getValue().name + " : " + iter.getValue().note_number;
 			list_notebook_guid[index] = iter.getKey();
 			index++;
