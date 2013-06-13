@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:id="@+id/textView_title" android:layout_gravity="center"
+            android:background="@android:drawable/button_onoff_indicator_on" android:ellipsize="middle" android:editable="false"
+            android:gravity="center_vertical|center_horizontal"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:ems="10"
+            android:id="@+id/editText_content" android:layout_gravity="left|center_vertical"
+            android:background="@android:color/holo_purple" android:ellipsize="start" android:text="Task Contents"
+            android:layout_weight="0.3"/>
+    <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView_task_progress" android:layout_gravity="center" android:layout_weight="0.7"
+            android:focusableInTouchMode="true"/>
+</LinearLayout>

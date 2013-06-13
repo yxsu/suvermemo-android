@@ -1,7 +1,7 @@
 package com.suyuxin.suvermemo;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,14 +28,14 @@ public class TaskPanel extends DataActivity {
     private ListView listView_unimportant_not_urgent;
     private ListView listView_daily;
 
-    private class NormalTaskAdapter extends ArrayAdapter<String>
+    protected class NormalTaskAdapter extends ArrayAdapter<String>
     {
         private NormalTaskAdapter(Context context, int resource, int textViewResourceId, List<String> objects) {
             super(context, resource, textViewResourceId, objects);
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             if(convertView == null)
             {
@@ -45,8 +45,30 @@ public class TaskPanel extends DataActivity {
             //set content
             TextView text = (TextView)convertView.findViewById(R.id.textView_task_name);
             text.setText(getItem(position));
+            text.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    String task_name = getItem(position);
+                    //seek guid of current task
+                    Iterator<String> iter_guid = task_info.keySet().iterator();
+                    while(iter_guid.hasNext())
+                    {
+                        NoteDbAdapter.TaskInfo task = task_info.get(iter_guid.next());
+                        if(task_name.endsWith(task.title))
+                        {//open task content
+                            Intent intent = new Intent(getContext(), TaskContent.class);
+                            intent.putExtra("title", task.title);
+                            intent.putExtra("guid", task.guid);
+                            intent.putExtra("content", task.content);
+                            startActivity(intent);
+                            break;
+                        }
+                    }
+                }
+            });
             return convertView;
         }
+
     }
 
     public void onCreate(Bundle savedInstanceState) {

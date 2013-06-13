@@ -43,7 +43,9 @@
         <activity android:name=".TaskPanel"
                   android:theme="@android:style/Theme.Holo.Light.NoActionBar">
         </activity>
-        <activity android:name=".TaskContent" android:label="Task Content"/>
+        <activity android:name=".TaskContent"
+                  android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+                  android:label="Task Content"/>
 
         <service
             android:name="com.suyuxin.suvermemo.ServiceDownloadSound"

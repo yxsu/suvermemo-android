@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent" android:baselineAligned="true">
+
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/editText_date" android:layout_gravity="center" android:enabled="false"
+            android:singleLine="true" android:text="Date" android:width="80dp" android:textIsSelectable="true"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_task_progress_content" android:layout_gravity="center" android:width="200dp"
+            android:textIsSelectable="true" android:text="Progress Content"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_task_progress_extra" android:layout_gravity="center" android:text="Extra"
+            android:textIsSelectable="true"/>
+</LinearLayout>
