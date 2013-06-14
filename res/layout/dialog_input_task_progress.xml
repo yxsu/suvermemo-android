@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Input Today's Progress:"
+            android:id="@+id/textView" android:layout_gravity="center"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_today_progress_content" android:layout_gravity="center" android:autoText="false"
+            android:editable="true" android:enabled="true" android:hint="Progress"/>
+    <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editText_today_progress_extra" android:layout_gravity="center" android:enabled="true" android:editable="true"
+            android:hint="Extra Information"/>
+    <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton_today_progress_ok" android:layout_gravity="center"
+            android:src="@android:drawable/ic_menu_save"/>
+</LinearLayout>

@@ -23,6 +23,21 @@
     <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listView_task_progress" android:layout_gravity="center" android:layout_weight="0.7"
+            android:id="@+id/listView_task_progress" android:layout_gravity="center" android:layout_weight="0.5"
             android:focusableInTouchMode="true"/>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" android:layout_gravity="center_horizontal|bottom">
+        <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageButton_edit_today_progress" android:layout_weight="1"
+                android:src="@android:drawable/ic_menu_edit"/>
+        <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/imageButton_set_alarm" android:layout_weight="1" android:cropToPadding="false"
+                android:src="@android:drawable/ic_popup_reminder"/>
+    </LinearLayout>
 </LinearLayout>
