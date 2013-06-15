@@ -157,7 +157,16 @@ public class MainActivity extends DataActivity{
                 Intent intent = new Intent(this, ServiceDownloadTask.class);
                 intent.putExtra("notebook_guid", task_notebook_guid);
                 startService(intent);
-
+                break;
+            case R.id.action_update_local_notebook:
+                //update local notebook
+                UpdateNotebookList();
+                Iterator<String> iter_guid = notebooks_having_local_contents.iterator();
+                while(iter_guid.hasNext())
+                {
+                    BeginDownloadNote(iter_guid.next());
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

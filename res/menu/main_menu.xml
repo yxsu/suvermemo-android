@@ -16,5 +16,10 @@
             android:orderInCategory="50"
             android:showAsAction="never"
             android:title="@string/text_update_task"/>
+    <item
+            android:id="@+id/action_update_local_notebook"
+            android:orderInCategory="50"
+            android:showAsAction="never"
+            android:title="@string/text_update_local_notebook"/>
 
 </menu>

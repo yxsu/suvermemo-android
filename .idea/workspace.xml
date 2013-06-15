@@ -54,7 +54,7 @@
     <file path="/Dummy.txt" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371184484382" ignored="false" />
     <file path="$PROJECT_DIR$/../Test/.idea/workspace.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1368703257841" ignored="false" />
     <file path="/fragment.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371112801914" ignored="false" />
-    <file path="/MainActivity.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371283794347" ignored="false" />
+    <file path="/MainActivity.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371284638343" ignored="false" />
     <file path="/ServiceDownloadNote.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371262969159" ignored="false" />
     <file path="/ServiceUpdateNotebookList.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1369717249164" ignored="false" />
     <file path="/ServiceDownload.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1369717540098" ignored="false" />
@@ -67,8 +67,8 @@
     <file path="/TaskPanel.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371262086284" ignored="false" />
     <file path="/ServiceDownloadTask.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1369729968447" ignored="false" />
     <file path="$PROJECT_DIR$/gen/com/suyuxin/suvermemo/R.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371123983627" ignored="false" />
-    <file path="/main_menu.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371117725947" ignored="false" />
-    <file path="/strings.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371117441057" ignored="false" />
+    <file path="/main_menu.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371284497116" ignored="false" />
+    <file path="/strings.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371284486732" ignored="false" />
     <file path="/activity_main.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371112981739" ignored="false" />
     <file path="/AndroidManifest.xml" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371123973491" ignored="false" />
     <file path="/TaskContent.java" changelist="f6c9db88-1850-4b8a-b035-11500d0c30ac" time="1371278890072" ignored="false" />
@@ -171,18 +171,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="activity_note.xml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/layout/activity_note.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="fragment_note_dummy.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/layout/fragment_note_dummy.xml">
           <provider selected="true" editor-type-id="text-editor">
@@ -216,10 +204,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MainActivity.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="MainActivity.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="60" column="44" selection-start="1887" selection-end="1887" vertical-scroll-proportion="0.0">
+            <state line="168" column="22" selection-start="6142" selection-end="6142" vertical-scroll-proportion="0.80707395">
               <folding>
                 <element signature="e#2425#3922#0" expanded="true" />
                 <element signature="e#3249#3308#0" expanded="true" />
@@ -233,8 +221,20 @@
       <file leaf-file-name="strings.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0">
+            <state line="40" column="68" selection-start="2569" selection-end="2569" vertical-scroll-proportion="-19.68">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main_menu.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/res/menu/main_menu.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="64" selection-start="906" selection-end="906" vertical-scroll-proportion="-13.2">
+              <folding>
+                <element signature="e#462#492#0" expanded="true" />
+                <element signature="e#662#688#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -263,7 +263,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="notebook_row.xml" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="notebook_row.xml" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/layout/notebook_row.xml">
           <provider editor-type-id="text-editor">
             <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -306,8 +306,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceUpdateNotebookList.java" />
         <option value="$PROJECT_DIR$/res/menu/note.xml" />
-        <option value="$PROJECT_DIR$/res/values/strings.xml" />
-        <option value="$PROJECT_DIR$/res/menu/main_menu.xml" />
         <option value="$PROJECT_DIR$/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/res/layout/row_task_progress.xml" />
         <option value="$PROJECT_DIR$/res/layout/dialog_input_task_progress.xml" />
@@ -317,9 +315,11 @@
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownloadNote.java" />
         <option value="$PROJECT_DIR$/res/layout/activity_task_content.xml" />
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskContent.java" />
-        <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/MainActivity.java" />
         <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/DataActivity.java" />
         <option value="$PROJECT_DIR$/res/layout/notebook_row.xml" />
+        <option value="$PROJECT_DIR$/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/res/menu/main_menu.xml" />
+        <option value="$PROJECT_DIR$/src/com/suyuxin/suvermemo/MainActivity.java" />
       </list>
     </option>
   </component>
@@ -543,7 +543,7 @@
       <workItem from="1371102607319" duration="24269000" />
       <workItem from="1371176045934" duration="11275000" />
       <workItem from="1371260257981" duration="2999000" />
-      <workItem from="1371272738802" duration="11292000" />
+      <workItem from="1371272738802" duration="11789000" />
     </task>
     <task id="LOCAL-00001" summary="test Android Studio">
       <created>1368703235652</created>
@@ -553,14 +553,14 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="101404000" />
+    <option name="totallyTimeSpent" value="101901000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="1366" height="742" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3262519" sideWeight="0.5630769" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32701063" sideWeight="0.67230767" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3262519" sideWeight="0.5630769" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32701063" sideWeight="0.67230767" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3279743" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3280303" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -647,13 +647,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/ServiceDownload.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="427" selection-end="427" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/TaskPanel.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="13" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
@@ -728,13 +721,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/row_task_progress.xml">
       <provider editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
@@ -743,28 +729,6 @@
       </provider>
       <provider selected="true" editor-type-id="android-designer">
         <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/MainActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="60" column="44" selection-start="1887" selection-end="1887" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#2425#3922#0" expanded="true" />
-            <element signature="e#3249#3308#0" expanded="true" />
-            <element signature="e#3907#3908#0" expanded="true" />
-            <element signature="e#4783#4787#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/DataActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="65" column="49" selection-start="2386" selection-end="2386" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#2815#2823#0" expanded="true" />
-            <element signature="e#2938#2997#0" expanded="true" />
-          </folding>
-        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/layout/activity_task_content.xml">
@@ -785,6 +749,45 @@
       </provider>
       <provider selected="true" editor-type-id="android-designer">
         <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/DataActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="65" column="49" selection-start="2386" selection-end="2386" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#2815#2823#0" expanded="true" />
+            <element signature="e#2938#2997#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="68" selection-start="2569" selection-end="2569" vertical-scroll-proportion="-19.68">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/res/menu/main_menu.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="64" selection-start="906" selection-end="906" vertical-scroll-proportion="-13.2">
+          <folding>
+            <element signature="e#462#492#0" expanded="true" />
+            <element signature="e#662#688#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/suyuxin/suvermemo/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="168" column="22" selection-start="6142" selection-end="6142" vertical-scroll-proportion="0.80707395">
+          <folding>
+            <element signature="e#2425#3922#0" expanded="true" />
+            <element signature="e#3249#3308#0" expanded="true" />
+            <element signature="e#3907#3908#0" expanded="true" />
+            <element signature="e#4783#4787#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
   </component>

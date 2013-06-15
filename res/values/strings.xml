@@ -38,5 +38,6 @@
     <string name="text_daily">恒</string>
     <string name="text_update_task">Update Tasks</string>
     <string name="info_need_create_task_notebook">请先创建任务列表笔记本</string>
+    <string name="text_update_local_notebook">Update Local Notebooks</string>
 
 </resources>
