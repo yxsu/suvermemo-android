@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -145,7 +146,17 @@ public class TaskContent extends Activity implements View.OnClickListener{
         //modify raw content
         if(is_new_day)
         {//add new content
-            int end_index = raw_content.indexOf("</tbody>", raw_content.indexOf("<table"));
+            int table_index = raw_content.indexOf("<table");
+            if(table_index <= 0)
+            {//need to create table head
+                table_index = raw_content.indexOf("</en-note>");
+                raw_content = raw_content.substring(0, table_index) +
+                        "<div>\n" +
+                        "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"2\">\n"+
+                        "<tbody>\n" + "</tbody>\n</table>\n</div>\n</en-note>";
+            }
+            table_index = raw_content.indexOf("<table");
+            int end_index = raw_content.indexOf("</tbody>", table_index);
             new_raw_content = raw_content.substring(0, end_index) + "<tr>\n";
             for(String col : today_content)
             {
