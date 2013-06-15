@@ -1,32 +1,20 @@
 package com.suyuxin.suvermemo;
 
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.Map.Entry;
 
 import com.evernote.client.android.EvernoteSession;
-import com.evernote.edam.type.Notebook;
-import com.evernote.thrift.transport.TTransportException;
+
 import com.suyuxin.suvermemo.NoteDbAdapter.NotebookInfo;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.widget.Toast;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.DownloadManager;
+
+import static java.util.Collections.sort;
 
 
 @SuppressLint("ValidFragment")
@@ -42,7 +30,7 @@ public class DataActivity extends Activity {
 
 	protected NoteDbAdapter database;
 	protected Map<String, NotebookInfo> notebook_info;// notebook_guid -> NotebookInfo
-	protected String[] list_notebook_guid;//used for ListView
+	protected List<String> list_notebook_guid;//used for ListView
 	protected Set<String> notebooks_having_local_contents;
 
     protected static final String TASK_NOTEBOOK_NAME = "任务列表";
@@ -64,40 +52,57 @@ public class DataActivity extends Activity {
 		database.close();
 		external_root_path = new File(Environment.getExternalStorageDirectory(), EXTERNAL_ROOT_PATH);
 	}
-	
-	protected String[] getNotebookNames()
+	private class NotebookComparator implements Comparator<String>
+    {
+        @Override
+        public int compare(String left, String right) {
+            //test whether has local content
+            if(notebooks_having_local_contents.contains(left) == notebooks_having_local_contents.contains(right))
+            {//compare note number
+                int left_count = notebook_info.get(left).note_number;
+                int right_count = notebook_info.get(right).note_number;
+                if(left_count < right_count)
+                    return 1;
+                else if(left_count > right_count)
+                    return -1;
+                else
+                    return 0;
+            }
+            else if(notebooks_having_local_contents.contains(left))
+                return -1;
+            else
+                return 1;
+        }
+    }
+	protected List<String> getNotebookNames()
 	{
 		database.open();
 		notebook_info = database.getNotebookList();
+        database.close();
+        List<String> list = new ArrayList<String>();
 		//if the database is empty, return to the empty tag
 		if(notebook_info.size() == 0)
 		{
-			database.close();
-			return new String[]{getResources().getString(R.string.text_empty_notebook_list)};
+            list.add(getResources().getString(R.string.text_empty_notebook_list));
+            return list;
+        }
+		list_notebook_guid = new ArrayList<String>(notebook_info.keySet());
+        sort(list_notebook_guid, new NotebookComparator());
+		Iterator<String> iter_guid = list_notebook_guid.iterator();
+		//copy notebook title into list
+		while(iter_guid.hasNext())
+		{   //get guid of task notebook
+            String guid = iter_guid.next();//notebook guid
+            if(notebook_info.get(guid).name.equals(TASK_NOTEBOOK_NAME))
+                task_notebook_guid = guid;//save guid of task notebook
+            else
+                list.add(notebook_info.get(guid).name + " : " + notebook_info.get(guid).note_number);
 		}
-		String[] names = new String[notebook_info.size() + 1];
-		list_notebook_guid = new String[notebook_info.size()];
-		names[notebook_info.size()] = getResources().getString(R.string.text_sync_sound_file);
-		int index = 0;
-		//iterate the map of notebook_info
-		Iterator<Entry<String, NotebookInfo>> iter_notebook = notebook_info.entrySet().iterator();
-		while(iter_notebook.hasNext())
-		{
-			Entry<String, NotebookInfo> iter = iter_notebook.next();
-            //get guid of task notebook
-            if(iter.getValue().name.equals(TASK_NOTEBOOK_NAME))
-            {
-                task_notebook_guid = iter.getKey();
-            }
-			names[index] = iter.getValue().name + " : " + iter.getValue().note_number;
-			list_notebook_guid[index] = iter.getKey();
-			index++;
-		}
-		database.close();
-		return names;
+        list_notebook_guid.remove(task_notebook_guid);
+		return list;
 	}
-	
-	protected Set<String> getWordsToDownloadSound()
+
+    protected Set<String> getWordsToDownloadSound()
 	{
 		database.open();
 		String[] local_titles = database.getTitleOfAllNotes();

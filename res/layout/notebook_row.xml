@@ -8,32 +8,21 @@
     <ImageView
     	android:id="@+id/image_notebook"
     	android:src="@drawable/notebook"
-    	android:layout_width="32dip"
-    	android:layout_height="32dip" />
+    	android:layout_width="48dip"
+    	android:layout_height="48dip" android:layout_alignParentStart="true"/>
     
     <TextView 
         android:id="@+id/text_notebook_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf = "@id/image_notebook"
         android:layout_centerVertical = "true"
         android:layout_gravity="center"
         android:textIsSelectable="false" />
-    
-    <LinearLayout
-        android:layout_width="wrap_content"
-   	 	android:layout_height="wrap_content"
-   	 	android:layout_alignParentRight="true"
-    	android:orientation="horizontal">
-    	<Button 
-        	android:id="@+id/button_notebook_enter"
-        	android:text="@string/text_notebook_enter"
-        	android:layout_width="wrap_content"
-        	android:layout_height="match_parent" />
-    	<Button 
-        	android:id="@+id/button_notebook_sync"
-        	android:text="@string/text_notebook_sync"
-        	android:layout_width="wrap_content"
-        	android:layout_height="match_parent" />
-    </LinearLayout>
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView_notebook_status" android:layout_centerVertical="true" android:layout_alignParentRight="true"
+            android:layout_alignParentStart="false" android:src="@android:drawable/presence_online"/>
+
 </RelativeLayout>

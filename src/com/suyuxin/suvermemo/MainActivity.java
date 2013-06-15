@@ -7,6 +7,7 @@ import java.util.ListIterator;
 import java.util.Map;
 
 import android.view.*;
+import android.widget.*;
 import com.evernote.client.android.EvernoteSession;
 import com.evernote.edam.notestore.NoteFilter;
 import com.evernote.edam.notestore.NoteList;
@@ -20,17 +21,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends DataActivity{
-	
-	private ListView view_notebook_list;
-	private boolean in_sync = false;
+
+    private List<String> notebook_list_in_view;
+    private NotebookListAdapter adapter;
+    private boolean in_sync = false;
 
     private void BeginDownloadNote(String notebook_guid)
     {
@@ -48,13 +44,11 @@ public class MainActivity extends DataActivity{
 
 	private class NotebookListAdapter extends ArrayAdapter<String> {
 
-		public NotebookListAdapter(Context context, int resource,
-				int textViewResourceId, String[] objects) {
-			super(context, resource, textViewResourceId, objects);
-			// TODO Auto-generated constructor stub
-		}
+        private NotebookListAdapter(Context context, int resource, int textViewResourceId, List<String> objects) {
+            super(context, resource, textViewResourceId, objects);
+        }
 
-		@Override
+        @Override
 		public View getView(final int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
 			if(convertView == null)
@@ -65,67 +59,46 @@ public class MainActivity extends DataActivity{
 			//set notebook name
 			TextView text = (TextView)convertView.findViewById(R.id.text_notebook_name);
 			text.setText(getItem(position));
-			//set sync button of each notebook in list
-			Button sync = (Button)convertView.findViewById(R.id.button_notebook_sync);
-			sync.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View arg0) {
-					// TODO Auto-generated method stub
-					if(in_sync)
-					{
-						Toast.makeText(getBaseContext(), R.string.text_wait_for_download, Toast.LENGTH_LONG).show();
-						return;
-					}
-					if(getItem(position).equals(getResources().getString(R.string.text_empty_notebook_list)))
-					{
-						if(!evernote_session.isLoggedIn())
-						{
-							evernote_session.authenticate(getBaseContext());
-						}
-                        UpdateNotebookList();
-					}
-					else
-					{//normally update content of a notebook
-                        UpdateNotebookList();
-                        BeginDownloadNote(list_notebook_guid[position]);
-					}
-				}
-			});
-
-            Button enter = (Button)convertView.findViewById(R.id.button_notebook_enter);
-            enter.setVisibility(Button.INVISIBLE);
-
-			if(list_notebook_guid == null || position >= list_notebook_guid.length)
-				return convertView;
-
-			enter.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					if(in_sync)
-					{
-						Toast.makeText(getBaseContext(), R.string.text_wait_for_download, Toast.LENGTH_LONG).show();
-						return;
-					}
-                    else
-                    {
-					    Intent intent = new Intent(getContext(), NoteActivity.class);
-					    intent.putExtra("notebook_guid", list_notebook_guid[position]);
-					    intent.putExtra("notebook_count",
-						    notebook_info.get(list_notebook_guid[position]).note_number);
-					    startActivity(intent);
+            if(list_notebook_guid == null)
+                return convertView;
+			//set status of notebook
+            ImageView iv_notebook_status = (ImageView)convertView.findViewById(R.id.imageView_notebook_status);
+            if(notebooks_having_local_contents.contains(list_notebook_guid.get(position)))
+                iv_notebook_status.setVisibility(ImageView.VISIBLE);
+            else
+                iv_notebook_status.setVisibility(ImageView.INVISIBLE);
+            //set OnClickListener
+            text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View arg0) {
+                    // TODO Auto-generated method stub
+                    if(notebooks_having_local_contents.contains(list_notebook_guid.get(position)))
+                    {//enter into notebook
+                        Intent intent = new Intent(getContext(), NoteActivity.class);
+                        intent.putExtra("notebook_guid", list_notebook_guid.get(position));
+                        intent.putExtra("notebook_count",
+                                notebook_info.get(list_notebook_guid.get(position)).note_number);
+                        startActivity(intent);
                     }
-				}
-			});
-			//test whether to show "enter" button
-			if(list_notebook_guid != null)
-			{
-				if(notebooks_having_local_contents.contains(list_notebook_guid[position]))
-					enter.setVisibility(Button.VISIBLE);
-				else
-					enter.setVisibility(Button.INVISIBLE);
-			}
+                    else
+                    {//first sync or login
+                        if(getItem(position).equals(getResources().getString(R.string.text_empty_notebook_list)))
+                        {
+                            if(!evernote_session.isLoggedIn())
+                            {
+                                evernote_session.authenticate(getBaseContext());
+                            }
+                            UpdateNotebookList();
+                        }
+                        else
+                        {//normally update content of a notebook
+                            UpdateNotebookList();
+                            BeginDownloadNote(list_notebook_guid.get(position));
+                        }
+                    }
+
+                }
+            });
 			return convertView;
 		}
 		
@@ -141,13 +114,6 @@ public class MainActivity extends DataActivity{
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		//
-		view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
-		NotebookListAdapter adapter = new NotebookListAdapter(this,
-				R.layout.notebook_row,
-				R.id.text_notebook_name,
-				getNotebookNames());
-		view_notebook_list.setAdapter(adapter);
 	}
 
     @Override
@@ -207,10 +173,11 @@ public class MainActivity extends DataActivity{
 		super.onCreate(savedInstanceState);
 		//set adapter of notebook list
 		setContentView(R.layout.activity_main);
-		view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
-		NotebookListAdapter adapter = new NotebookListAdapter(this,
+        notebook_list_in_view = getNotebookNames();
+		ListView view_notebook_list = (ListView)findViewById(R.id.listView_notebook);
+		adapter = new NotebookListAdapter(this,
 				R.layout.notebook_row,
-				R.id.text_notebook_name,
+                R.id.text_notebook_name,
 				getNotebookNames());
 		view_notebook_list.setAdapter(adapter);
 	}
