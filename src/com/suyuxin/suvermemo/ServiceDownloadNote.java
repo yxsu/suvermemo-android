@@ -55,12 +55,21 @@ public class ServiceDownloadNote extends ServiceDownload {
                 Note note = cloud_note_list.get(index);
                 if(local_notes.containsKey(note.getGuid()))
                 {//update content of local note
-                    if(local_notes.get(note.getGuid()).update_time < note.getUpdated())
+                    NoteDbAdapter.NoteInfo local_note = local_notes.get(note.getGuid());
+                    if(local_note.update_time < note.getUpdated())
                     {
                         note.setContent(client.getNoteContent(auth_token, note.getGuid()));
                         database.updateNoteContent(note);
                         //
                         updateProgress(LogTag, "Update note : " + note.getTitle(), 0);
+                    }
+                    else if(local_note.update_time > note.getUpdated())
+                    {//need to update cloud note
+                        note.setUpdated(local_note.update_time);
+                        note.setContent(local_note.content);
+                        client.updateNote(auth_token, note);
+                        //
+                        updateProgress(LogTag, "Upload note : " + note.getTitle(), 1);
                     }
                     //remove record
                     local_notes.remove(note.getGuid());

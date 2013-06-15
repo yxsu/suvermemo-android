@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import com.evernote.edam.type.Note;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -23,6 +24,7 @@ public class TaskContent extends Activity implements View.OnClickListener{
     private String title;
     private String guid_task;
     private String raw_content;
+    private String task_notebook_guid;
     private List<String[]> progress;
     private String tag_today;
 
@@ -38,13 +40,15 @@ public class TaskContent extends Activity implements View.OnClickListener{
         title = intent.getStringExtra("title");
         guid_task = intent.getStringExtra("guid");
         raw_content = intent.getStringExtra("content");
+        task_notebook_guid = intent.getStringExtra("notebook_guid");
         ReadProgressFromRawContent();
         //set view
         setContentView(R.layout.activity_task_content);
         TextView tv_title = (TextView)findViewById(R.id.textView_title);
         tv_title.setText(title);
         EditText et_content = (EditText)findViewById(R.id.editText_content);
-        et_content.setText(ReadTaskContentFromRawContent());
+        //et_content.setText(ReadTaskContentFromRawContent());
+        et_content.setText(raw_content);
         //set progress
         ListView view_progress = (ListView)findViewById(R.id.listView_task_progress);
         adapter = new ProgressAdapter(this, R.id.editText_date, progress);
@@ -123,13 +127,53 @@ public class TaskContent extends Activity implements View.OnClickListener{
         if(progress.isEmpty() || !progress.get(progress.size()-1)[0].equals(tag_today))
         {//add new content
             progress.add(new String[]{tag_today, content, extra});
+            SaveChangeIntoDatabase(true);
         }
         else
         {//modify existed content
             progress.get(progress.size()-1)[1] = content;
             progress.get(progress.size()-1)[2] = extra;
+            SaveChangeIntoDatabase(false);
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private void SaveChangeIntoDatabase(boolean is_new_day)
+    {
+        String new_raw_content;
+        String[] today_content = progress.get(progress.size() - 1);
+        //modify raw content
+        if(is_new_day)
+        {//add new content
+            int end_index = raw_content.indexOf("</tbody>", raw_content.indexOf("<table"));
+            new_raw_content = raw_content.substring(0, end_index) + "<tr>\n";
+            for(String col : today_content)
+            {
+                if(col != null)
+                    new_raw_content += "<td valign=\"top\">" + col + "</td>\n";
+            }
+            new_raw_content += "</tr>\n";
+        }
+        else
+        {//modify the last item
+            int last_content_index = raw_content.indexOf("<td valign=\"top\">",
+                    raw_content.indexOf("<td valign=\"top\">" + tag_today) + 10) + 16;
+            new_raw_content = raw_content.substring(0, last_content_index) + today_content[1] + "</td>\n";
+            if(today_content[2] != null)
+                new_raw_content += "<td valign=\"top\">" + today_content[2] + "</td>\n</tr>\n";
+        }
+        new_raw_content += "</tboday>\n</table>\n</div>\n</en-note>";
+        //save into database
+        NoteDbAdapter database = new NoteDbAdapter(this);
+        database.open();
+        Note note = new Note();
+        note.setContent(new_raw_content);
+        note.setTitle(title);
+        note.setGuid(guid_task);
+        note.setNotebookGuid(task_notebook_guid);
+        note.setUpdated(Calendar.getInstance().getTimeInMillis());
+        database.updateNoteContent(note);
+        database.close();
     }
 
     private class ProgressAdapter extends ArrayAdapter<String[]>

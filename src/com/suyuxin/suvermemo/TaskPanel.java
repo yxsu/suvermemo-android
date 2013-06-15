@@ -60,6 +60,7 @@ public class TaskPanel extends DataActivity {
                             intent.putExtra("title", task.title);
                             intent.putExtra("guid", task.guid);
                             intent.putExtra("content", task.content);
+                            intent.putExtra("notebook_guid", task_notebook_guid);
                             startActivity(intent);
                             break;
                         }
