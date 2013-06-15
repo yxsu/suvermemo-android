@@ -234,6 +234,7 @@ public class NoteDbAdapter{
                     map.get(guid).title = cursor.getString(1);
                     map.get(guid).content = cursor.getString(2);
                     map.get(guid).update_time = cursor.getLong(3);
+                    map.get(guid).guid = guid;
                 }
             }while(cursor.moveToNext());
         }

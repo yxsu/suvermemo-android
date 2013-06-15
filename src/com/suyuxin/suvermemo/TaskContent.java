@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.*;
 import com.evernote.edam.type.Note;
 
@@ -46,9 +47,8 @@ public class TaskContent extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_task_content);
         TextView tv_title = (TextView)findViewById(R.id.textView_title);
         tv_title.setText(title);
-        EditText et_content = (EditText)findViewById(R.id.editText_content);
-        //et_content.setText(ReadTaskContentFromRawContent());
-        et_content.setText(raw_content);
+        WebView wv_content = (WebView)findViewById(R.id.webView_task_content);
+        wv_content.loadData(ReadTaskContentFromRawContent(), "text/html; charset=UTF-8", null);
         //set progress
         ListView view_progress = (ListView)findViewById(R.id.listView_task_progress);
         adapter = new ProgressAdapter(this, R.id.editText_date, progress);
@@ -149,7 +149,7 @@ public class TaskContent extends Activity implements View.OnClickListener{
             new_raw_content = raw_content.substring(0, end_index) + "<tr>\n";
             for(String col : today_content)
             {
-                if(col != null)
+                if(col != null && !col.equals(""))
                     new_raw_content += "<td valign=\"top\">" + col + "</td>\n";
             }
             new_raw_content += "</tr>\n";
@@ -162,7 +162,7 @@ public class TaskContent extends Activity implements View.OnClickListener{
             if(today_content[2] != null)
                 new_raw_content += "<td valign=\"top\">" + today_content[2] + "</td>\n</tr>\n";
         }
-        new_raw_content += "</tboday>\n</table>\n</div>\n</en-note>";
+        new_raw_content += "</tbody>\n</table>\n</div>\n</en-note>";
         //save into database
         NoteDbAdapter database = new NoteDbAdapter(this);
         database.open();

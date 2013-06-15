@@ -42,9 +42,9 @@ public class ServiceDownloadNote extends ServiceDownload {
             do
             {
                 list_buffer = client.findNotes(auth_token, filter, offset, max_note_number);
+                updateProgress(LogTag, "Fetch head date of notes " + offset + " - " + (offset + list_buffer.getNotesSize()), 0);
                 offset += list_buffer.getNotesSize();
                 cloud_note_list.addAll(list_buffer.getNotes());
-                updateProgress(LogTag, "Fetch head date of notes " + offset + " - " + (offset + list_buffer.getNotesSize()), 0);
             }while(list_buffer.getTotalNotes() > cloud_note_list.size());
             //get note content
             database.open();
@@ -58,18 +58,16 @@ public class ServiceDownloadNote extends ServiceDownload {
                     NoteDbAdapter.NoteInfo local_note = local_notes.get(note.getGuid());
                     if(local_note.update_time < note.getUpdated())
                     {
+                        updateProgress(LogTag, "Update note : " + note.getTitle(), 0);
                         note.setContent(client.getNoteContent(auth_token, note.getGuid()));
                         database.updateNoteContent(note);
-                        //
-                        updateProgress(LogTag, "Update note : " + note.getTitle(), 0);
                     }
                     else if(local_note.update_time > note.getUpdated())
                     {//need to update cloud note
+                        updateProgress(LogTag, "Upload note : " + note.getTitle(), 1);
                         note.setUpdated(local_note.update_time);
                         note.setContent(local_note.content);
                         client.updateNote(auth_token, note);
-                        //
-                        updateProgress(LogTag, "Upload note : " + note.getTitle(), 1);
                     }
                     //remove record
                     local_notes.remove(note.getGuid());
