@@ -67,6 +67,7 @@ public class ServiceDownloadNote extends ServiceDownload {
                         updateProgress(LogTag, "Upload note : " + note.getTitle(), 1);
                         note.setUpdated(local_note.update_time);
                         note.setContent(local_note.content);
+                        note.setUpdateSequenceNum(note.getUpdateSequenceNum() - 1);
                         client.updateNote(auth_token, note);
                     }
                     //remove record

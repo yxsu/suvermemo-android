@@ -168,10 +168,12 @@ public class TaskContent extends Activity implements View.OnClickListener{
         else
         {//modify the last item
             int last_content_index = raw_content.indexOf("<td valign=\"top\">",
-                    raw_content.indexOf("<td valign=\"top\">" + tag_today) + 10) + 16;
+                    raw_content.indexOf("<td valign=\"top\">" + tag_today) + 10) + 17;
             new_raw_content = raw_content.substring(0, last_content_index) + today_content[1] + "</td>\n";
-            if(today_content[2] != null)
+            if(today_content[2] != null && !today_content[2].equals(""))
                 new_raw_content += "<td valign=\"top\">" + today_content[2] + "</td>\n</tr>\n";
+            else
+                new_raw_content +="</tr>\n";
         }
         new_raw_content += "</tbody>\n</table>\n</div>\n</en-note>";
         //save into database
@@ -182,7 +184,7 @@ public class TaskContent extends Activity implements View.OnClickListener{
         note.setTitle(title);
         note.setGuid(guid_task);
         note.setNotebookGuid(task_notebook_guid);
-        note.setUpdated(Calendar.getInstance().getTimeInMillis());
+        note.setUpdated(Calendar.getInstance().getTimeInMillis() / 1000 * 1000);
         database.updateNoteContent(note);
         database.close();
     }

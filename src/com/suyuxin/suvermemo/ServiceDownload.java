@@ -19,7 +19,6 @@ public class ServiceDownload extends IntentService {
     protected String auth_token;
     protected NoteStore.Client client;
     protected NoteDbAdapter database;
-    protected Map<String, NoteDbAdapter.NotebookInfo> notebook_info;// notebook_guid -> NotebookInfo
     public ServiceDownload(String name) {
         super(name);
         //set evernote client
