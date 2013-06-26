@@ -1,15 +1,8 @@
 package com.suyuxin.suvermemo;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -136,14 +129,6 @@ public class NoteActivity extends FragmentActivity {
 		database.close();
 		count_total_today_note = queue_notes.size();
 	}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.note, menu);
-		return true;
-	}
-	
-	
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -297,6 +282,14 @@ public class NoteActivity extends FragmentActivity {
 			else
 			{//head
 				View rootView = inflater.inflate(R.layout.fragment_note_head, container, false);
+                //set show time
+                TextView tv_show_time = (TextView)rootView.findViewById(R.id.textView_show_time);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(queue_notes.element().second.show_time);
+                tv_show_time.setText("Show Time is "+ String.valueOf(calendar.get(Calendar.MONTH)+1) + "/" +
+                        String.valueOf(calendar.get(Calendar.DAY_OF_MONTH)) + "/" +
+                        String.valueOf(calendar.get(Calendar.YEAR)));
+                //set pronunciation button
 				Button play = (Button)rootView.findViewById(R.id.button_play_sound);
 				play.setVisibility(Button.INVISIBLE);
 				//test whether to add pronunciation
